@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Row, Col } from 'antd';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { Form, Input, Button } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
-export default class Login extends Component {
-  onFinish = (values) => {
-    console.log('Success:', values);
+import './login.less';
+
+import { login } from '../../redux/actions';
+
+class Login extends Component {
+  onFinish = (user) => {
+    this.props.login(user);
+    console.log('Success:', user);
   };
 
   onFinishFailed = (errorInfo) => {
@@ -12,10 +19,14 @@ export default class Login extends Component {
   };
 
   render() {
+    const { msg, redirectTo } = this.props.user;
+    if (redirectTo) {
+      return <Redirect to={redirectTo} />;
+    }
     return (
-      <div className={'layout-container'}>
-        <Row justify="center">
-          <Col span={4}>
+      <div className="container">
+        <div className="content">
+          <div className="main">
             <Form
               wrapperCol={{ span: 24 }}
               name="loginForm"
@@ -65,9 +76,11 @@ export default class Login extends Component {
                 </Button>
               </Form.Item>
             </Form>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </div>
     );
   }
 }
+
+export default connect((state) => ({ user: state.user }), { login })(Login);
