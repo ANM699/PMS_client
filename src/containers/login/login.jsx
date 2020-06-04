@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import './login.less';
@@ -36,6 +36,9 @@ class Login extends Component {
               onFinish={this.onFinish}
               onFinishFailed={this.onFinishFailed}
             >
+              <Form.Item>
+                {msg ? <Alert type="error" message={msg} showIcon /> : null}
+              </Form.Item>
               <Form.Item
                 name="email"
                 rules={[
@@ -54,7 +57,6 @@ class Login extends Component {
                   placeholder="邮箱"
                 />
               </Form.Item>
-
               <Form.Item
                 name="password"
                 rules={[
@@ -69,7 +71,6 @@ class Login extends Component {
                   placeholder="密码"
                 />
               </Form.Item>
-
               <Form.Item>
                 <Button type="primary" htmlType="login">
                   登录

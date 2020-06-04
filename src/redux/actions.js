@@ -1,9 +1,13 @@
-import { AUTH_SUCCESS, ERROR_MSG } from './action-types';
+import { AUTH_SUCCESS, ERROR_MSG,RESET_USER } from './action-types';
 import { reqLogin } from '../api';
 
 export const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user });
 
 export const errorMsg = (msg) => ({ type: ERROR_MSG, data: msg });
+
+export const resetUser = msg => {
+  return { type: RESET_USER, data: msg };
+};
 
 export const login = (user) => {
   const { email, password } = user;
