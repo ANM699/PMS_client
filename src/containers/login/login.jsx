@@ -44,11 +44,11 @@ class Login extends Component {
                 rules={[
                   {
                     type: 'email',
-                    message: '邮箱格式不正确!',
+                    message: '邮箱格式不正确！',
                   },
                   {
                     required: true,
-                    message: '请输入邮箱!',
+                    message: '请输入邮箱！',
                   },
                 ]}
               >
@@ -62,7 +62,7 @@ class Login extends Component {
                 rules={[
                   {
                     required: true,
-                    message: '请输入密码!',
+                    message: '请输入密码！',
                   },
                 ]}
               >

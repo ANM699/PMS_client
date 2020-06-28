@@ -14,7 +14,7 @@ const initUser = {
 function user(state = initUser, action) {
   switch (action.type) {
     case AUTH_SUCCESS:
-      return { ...action.data, redirectTo: '/workbench' };
+      return { ...action.data, redirectTo: '/project/list' };
     case RESET_USER:
       return { ...initUser, msg: action.data };
     case ERROR_MSG:

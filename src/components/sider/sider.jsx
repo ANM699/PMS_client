@@ -52,10 +52,10 @@ class Sider extends Component {
           <Menu.Item key="5" icon={<UserOutlined />}>
             项目成员
           </Menu.Item>
-          <Menu.Item key="5" icon={<UserOutlined />}>
+          <Menu.Item key="6" icon={<UserOutlined />}>
             会议纪要
           </Menu.Item>
-          <Menu.Item key="6" icon={<UserOutlined />}>
+          <Menu.Item key="7" icon={<UserOutlined />}>
             燃尽图&看板
           </Menu.Item>
         </Menu>
