@@ -15,9 +15,17 @@ class ProjectList extends Component {
   };
 
   handleOk = (e) => {
-    this.setState({
+    this.form.validateFields().then((value)=>{
+      console.log(value);
+      this.form.resetFields();
+      this.setState({
       visible: false,
     });
+    }).catch((info) => {
+      console.log('验证失败：',info);
+    }
+    )
+   
   };
 
   handleCancel = (e) => {
@@ -46,7 +54,7 @@ class ProjectList extends Component {
             onClick={this.showModal}
           >
             <PlusOutlined />
-            添加
+            创建项目
           </Button>
           <List
             size="large"
@@ -60,7 +68,7 @@ class ProjectList extends Component {
         </Card>
         
         <Modal
-          title="添加项目"
+          title="创建项目"
           width={640}
           visible={this.state.visible}
           onOk={this.handleOk}
@@ -68,7 +76,7 @@ class ProjectList extends Component {
           okText="保存"
           cancelText="取消"
         >
-          <Form
+          <Form ref={(form)=>this.form=form}
             labelCol={{
               span: 7,
             }}
@@ -77,19 +85,19 @@ class ProjectList extends Component {
             }}
           >
             <Form.Item
-              name="title"
+              name="projectName"
               label="项目名称"
               rules={[
                 {
                   required: true,
-                  message: '请输入任务名称！',
+                  message: '请输入项目名称！',
                 },
               ]}
             >
               <Input placeholder="请输入" />
             </Form.Item>
             <Form.Item
-              name="createdAt"
+              name="startDate"
               label="开始时间"
               rules={[
                 {
@@ -99,19 +107,18 @@ class ProjectList extends Component {
               ]}
             >
               <DatePicker
-                showTime
                 placeholder="请选择"
-                format="YYYY-MM-DD HH:mm:ss"
                 style={{
                   width: '100%',
                 }}
               />
             </Form.Item>
             <Form.Item
-              name="subDescription"
+              name="description"
               label="项目简介"
               rules={[
                 {
+                  required: true,
                   message: '请输入至少五个字符的项目简介！',
                   min: 5,
                 },
