@@ -62,13 +62,14 @@ class Main extends Component {
                 onClick: this.toggle,
               }
             )}
-            <div style={{ flex: '1 1 0%' }}></div>
+            <div className="title">{this.props.project.projectName}</div>
             <LogoutOutlined className="logout" onClick={this.logout} />
           </Header>
           <Content className="contenter">
             {/* <div className="contenter"> */}
             <Switch>
-              <Route path="/project/list" component={ProjectList}></Route>
+              <Route exact path="/" component={ProjectList}></Route>
+              {/* <Route path="/project/list" component={ProjectList}></Route> */}
               <Route path="/project/profile" component={ProjectProfile}></Route>
               <Route component={NotFound}></Route>
             </Switch>
@@ -80,7 +81,7 @@ class Main extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({ user: state.user });
+const mapStateToProps = (state) => ({ user: state.user,project:state.project });
 
 const mapDispatchToProps = { resetUser };
 

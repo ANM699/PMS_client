@@ -6,6 +6,7 @@ import {
   AUTH_SUCCESS,
   ERROR_MSG,
   RESET_USER,
+  SWITCH_PROJECT,
   RECEIVE_PROJECT_LIST,
   RECEIVE_NEW_PROJECT,
 } from "./action-types";
@@ -20,7 +21,7 @@ const initUser = {
 function user(state = initUser, action) {
   switch (action.type) {
     case AUTH_SUCCESS:
-      return { ...action.data, redirectTo: "/project/list" };
+      return { ...action.data, redirectTo: "/" };
     case RESET_USER:
       return { ...initUser, msg: action.data };
     case ERROR_MSG:
@@ -30,7 +31,22 @@ function user(state = initUser, action) {
   }
 }
 
-function project(state, action) {}
+
+const initProject = {
+  projectName: "",
+  startDate: null,
+  endDate: null,
+  description: "",
+};
+
+function project(state=initProject, action) {
+  switch (action.type) {
+    case SWITCH_PROJECT:
+      return action.data;
+    default:
+      return state;
+  }
+}
 
 function projectList(state = [], action) {
   switch (action.type) {
@@ -45,5 +61,6 @@ function projectList(state = [], action) {
 // 返回合并后的reducer 函数
 export default combineReducers({
   user,
+  project,
   projectList,
 });

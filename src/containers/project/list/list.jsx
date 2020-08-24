@@ -1,10 +1,23 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Card, Button, List, Modal, Form, Input, DatePicker } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+  Card,
+  Button,
+  List,
+  Modal,
+  Form,
+  Input,
+  DatePicker,
+  Popconfirm,
+} from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
-import { createProject, getProjectList } from "../../../redux/actions";
+import {
+  createProject,
+  getProjectList,
+  switchProject,
+} from '../../../redux/actions';
 
 const { RangePicker } = DatePicker;
 
@@ -19,13 +32,18 @@ class ProjectList extends Component {
     });
   };
 
+  confirm = (item) => {
+    console.log(item);
+    this.props.switchProject(item);
+  };
+
   handleOk = (e) => {
     this.form
       .validateFields()
       .then((value) => {
-        const rangeDate = value["rangeDate"];
-        value.startDate = rangeDate[0].format("YYYY-MM-DD");
-        value.endDate = rangeDate[1].format("YYYY-MM-DD");
+        const rangeDate = value['rangeDate'];
+        value.startDate = rangeDate[0].format('YYYY-MM-DD');
+        value.endDate = rangeDate[1].format('YYYY-MM-DD');
         this.props.createProject(value);
         this.form.resetFields();
         this.setState({
@@ -33,7 +51,7 @@ class ProjectList extends Component {
         });
       })
       .catch((info) => {
-        console.log("验证失败：", info);
+        console.log('验证失败：', info);
       });
   };
 
@@ -55,7 +73,7 @@ class ProjectList extends Component {
           <Button
             type="dashed"
             style={{
-              width: "100%",
+              width: '100%',
               marginBottom: 8,
             }}
             onClick={this.showModal}
@@ -63,13 +81,25 @@ class ProjectList extends Component {
             <PlusOutlined />
             创建项目
           </Button>
+
           <List
             size="large"
             dataSource={data}
             renderItem={(item) => (
               <List.Item actions={[<a key="edit">编辑</a>]}>
                 <List.Item.Meta
-                  title={<a>{item.projectName}</a>}
+                  title={
+                    <Popconfirm
+                      title="选择并切换至该项目？"
+                      onConfirm={() => {
+                        this.confirm(item);
+                      }}
+                      okText="确认"
+                      cancelText="取消"
+                    >
+                      <a>{item.projectName}</a>
+                    </Popconfirm>
+                  }
                   description={item.description}
                 />
               </List.Item>
@@ -101,7 +131,7 @@ class ProjectList extends Component {
               rules={[
                 {
                   required: true,
-                  message: "请输入项目名称！",
+                  message: '请输入项目名称！',
                 },
               ]}
             >
@@ -113,13 +143,13 @@ class ProjectList extends Component {
               rules={[
                 {
                   required: true,
-                  message: "请选择选择项目时间！",
+                  message: '请选择选择项目时间！',
                 },
               ]}
             >
               <RangePicker
                 style={{
-                  width: "100%",
+                  width: '100%',
                 }}
               />
             </Form.Item>
@@ -129,7 +159,7 @@ class ProjectList extends Component {
               rules={[
                 {
                   required: true,
-                  message: "请输入至少五个字符的项目简介！",
+                  message: '请输入至少五个字符的项目简介！',
                   min: 5,
                 },
               ]}
@@ -143,8 +173,11 @@ class ProjectList extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({ projectList: state.projectList });
+const mapStateToProps = (state) => ({
+  projectList: state.projectList,
+  project: state.project,
+});
 
-const mapDispatchToProps = { createProject, getProjectList };
+const mapDispatchToProps = { createProject, getProjectList, switchProject };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectList);

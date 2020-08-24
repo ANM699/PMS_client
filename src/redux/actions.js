@@ -2,6 +2,7 @@ import {
   AUTH_SUCCESS,
   ERROR_MSG,
   RESET_USER,
+  SWITCH_PROJECT,
   RECEIVE_PROJECT_LIST,
   RECEIVE_NEW_PROJECT,
 } from "./action-types";
@@ -42,6 +43,8 @@ const receiveNewProject = (project) => ({
   type: RECEIVE_NEW_PROJECT,
   data: project,
 });
+
+export const switchProject=(project)=>({type:SWITCH_PROJECT,data:project});
 
 export const createProject = (project) => {
   return async (dispatch) => {

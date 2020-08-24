@@ -10,3 +10,5 @@ export const RESET_USER = "RESET_USER";
 export const RECEIVE_PROJECT_LIST = "RECEIVE_PROJECT_LIST";
 //新增项目到列表
 export const RECEIVE_NEW_PROJECT = "RECEIVE_NEW_PROJECT";
+//选择并切换至该项目
+export const SWITCH_PROJECT="SWITCH_PROJECT";

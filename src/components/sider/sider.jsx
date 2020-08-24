@@ -25,7 +25,7 @@ class Sider extends Component {
       >
         <div className="logo">PMS</div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-          <Menu.Item
+          {/* <Menu.Item
             key="1"
             icon={<UserOutlined />}
             onClick={() => {
@@ -33,7 +33,7 @@ class Sider extends Component {
             }}
           >
             项目列表
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item
             key="2"
             icon={<VideoCameraOutlined />}
