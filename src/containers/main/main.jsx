@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import Cookies from 'js-cookie';
-import { Redirect, Switch, Route } from 'react-router-dom';
-import { Layout, Modal } from 'antd';
+import React, { Component } from "react";
+import Cookies from "js-cookie";
+import { Redirect, Switch, Route } from "react-router-dom";
+import { Layout, Modal } from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   LogoutOutlined,
   ExclamationCircleOutlined,
-} from '@ant-design/icons';
-import { connect } from 'react-redux';
+} from "@ant-design/icons";
+import { connect } from "react-redux";
 
-import './main.less';
+import "./main.less";
 
-import Sider from '../../components/sider/sider';
-import ProjectList from '../project/list/list';
-import ProjectProfile from '../project/profile/profile';
-import NotFound from '../exception/not-found';
-import { resetUser } from '../../redux/actions';
+import Sider from "../../components/sider/sider";
+import MyProjects from "../project/my/my";
+import ProjectProfile from "../project/profile/profile";
+import NotFound from "../exception/not-found";
+import { resetUser } from "../../redux/actions";
 
 const { Header, Content } = Layout;
 
@@ -34,19 +34,19 @@ class Main extends Component {
   logout = () => {
     let that = this;
     Modal.confirm({
-      title: '确认退出登录吗？',
+      title: "确认退出登录吗？",
       icon: <ExclamationCircleOutlined />,
-      cancelText: '取消',
-      okText: '确定',
+      cancelText: "取消",
+      okText: "确定",
       onOk() {
-        Cookies.remove('userid');
+        Cookies.remove("userid");
         that.props.resetUser();
       },
     });
   };
 
   render() {
-    const userid = Cookies.get('userid');
+    const userid = Cookies.get("userid");
     if (!userid) {
       return <Redirect to="/login" />;
     }
@@ -58,22 +58,20 @@ class Main extends Component {
             {React.createElement(
               this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
               {
-                className: 'trigger',
+                className: "trigger",
                 onClick: this.toggle,
               }
             )}
             <div className="title">{this.props.project.projectName}</div>
             <LogoutOutlined className="logout" onClick={this.logout} />
           </Header>
-          <Content className="contenter">
-            {/* <div className="contenter"> */}
+          <Content className="container">
             <Switch>
-              <Route exact path="/" component={ProjectList}></Route>
+              <Route exact path="/" component={MyProjects}></Route>
               {/* <Route path="/project/list" component={ProjectList}></Route> */}
               <Route path="/project/profile" component={ProjectProfile}></Route>
               <Route component={NotFound}></Route>
             </Switch>
-            {/* </div> */}
           </Content>
         </Layout>
       </Layout>
@@ -81,7 +79,10 @@ class Main extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({ user: state.user,project:state.project });
+const mapStateToProps = (state) => ({
+  user: state.user,
+  project: state.project,
+});
 
 const mapDispatchToProps = { resetUser };
 
