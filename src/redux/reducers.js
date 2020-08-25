@@ -1,7 +1,7 @@
 /*
 包含多个用于生成新的state 的reducer 函数的模块
 */
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 import {
   AUTH_SUCCESS,
   ERROR_MSG,
@@ -11,15 +11,12 @@ import {
   SWITCH_PROJECT,
   RECEIVE_PROJECT_LIST,
   RECEIVE_NEW_PROJECT,
-} from './action-types';
-
-import { getRedirectTo } from '../utils/index';
+} from "./action-types";
 
 const initUser = {
-  username: '',
-  email: '',
-  msg: '',
-  redirectTo: '',
+  username: "",
+  email: "",
+  msg: "",
 };
 
 function user(state = initUser, action) {
@@ -27,7 +24,6 @@ function user(state = initUser, action) {
     case AUTH_SUCCESS:
       return {
         ...action.data,
-        redirectTo: getRedirectTo(),
       };
     case RECEIVE_USER:
       return action.data;
@@ -47,11 +43,11 @@ function user(state = initUser, action) {
 }
 
 const initProject = {
-  projectName: '',
+  projectName: "",
   startDate: null,
   endDate: null,
-  description: '',
-  msg: '',
+  description: "",
+  msg: "",
 };
 
 function project(state = initProject, action) {

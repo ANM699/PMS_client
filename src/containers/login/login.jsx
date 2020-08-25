@@ -1,27 +1,29 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { Form, Input, Button, Alert } from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { Form, Input, Button, Alert } from "antd";
+import { MailOutlined, LockOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
 
-import './login.less';
+import "./login.less";
 
-import { login } from '../../redux/actions';
+import { login } from "../../redux/actions";
 
 class Login extends Component {
   onFinish = (user) => {
     this.props.login(user);
-    console.log('Success:', user);
+    console.log("Success:", user);
   };
 
   onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   render() {
-    const { msg, redirectTo } = this.props.user;
-    if (redirectTo) {
-      return <Redirect to={redirectTo} />;
+    const userId = Cookies.get("userId");
+    const { msg } = this.props.user;
+    if (userId) {
+      return <Redirect to="/" />;
     }
     return (
       <div className="container">
@@ -43,12 +45,12 @@ class Login extends Component {
                 name="email"
                 rules={[
                   {
-                    type: 'email',
-                    message: '邮箱格式不正确！',
+                    type: "email",
+                    message: "邮箱格式不正确！",
                   },
                   {
                     required: true,
-                    message: '请输入邮箱！',
+                    message: "请输入邮箱！",
                   },
                 ]}
               >
@@ -62,7 +64,7 @@ class Login extends Component {
                 rules={[
                   {
                     required: true,
-                    message: '请输入密码！',
+                    message: "请输入密码！",
                   },
                 ]}
               >
