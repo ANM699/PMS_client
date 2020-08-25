@@ -2,16 +2,20 @@ import {
   AUTH_SUCCESS,
   ERROR_MSG,
   RESET_USER,
+  RECEIVE_USER,
+  RESET_PROJECT,
   SWITCH_PROJECT,
   RECEIVE_PROJECT_LIST,
   RECEIVE_NEW_PROJECT,
-} from "./action-types";
-import * as api from "../api";
+} from './action-types';
+import * as api from '../api';
 
 //用户
-export const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user });
+const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user });
 
-export const errorMsg = (msg) => ({ type: ERROR_MSG, data: msg });
+const receiveUser = (user) => ({ type: RECEIVE_USER, data: user });
+
+const errorMsg = (msg) => ({ type: ERROR_MSG, data: msg });
 
 export const resetUser = (msg) => {
   return { type: RESET_USER, data: msg };
@@ -20,7 +24,7 @@ export const resetUser = (msg) => {
 export const login = (user) => {
   const { email, password } = user;
   if (!email || !password) {
-    return errorMsg("请输入邮箱和密码");
+    return errorMsg('请输入邮箱和密码');
   }
   return async (dispatch) => {
     const response = await api.reqLogin(user);
@@ -29,6 +33,19 @@ export const login = (user) => {
       dispatch(authSuccess(result.data));
     } else {
       dispatch(errorMsg(result.msg));
+    }
+  };
+};
+
+//获取用户信息
+export const getUser = () => {
+  return async (dispatch) => {
+    const response = await api.reqUser();
+    const result = response.data;
+    if (result.code === 0) {
+      dispatch(receiveUser(result.data));
+    } else {
+      dispatch(resetUser(result.msg));
     }
   };
 };
@@ -44,7 +61,12 @@ const receiveNewProject = (project) => ({
   data: project,
 });
 
-export const switchProject=(project)=>({type:SWITCH_PROJECT,data:project});
+export const switchProject = (project) => ({
+  type: SWITCH_PROJECT,
+  data: project,
+});
+
+export const resetProject = () => ({ type: RESET_PROJECT });
 
 export const createProject = (project) => {
   return async (dispatch) => {
@@ -54,6 +76,18 @@ export const createProject = (project) => {
       dispatch(receiveNewProject(result.data));
     } else {
       // dispatch();
+    }
+  };
+};
+
+export const getProject = () => {
+  return async (dispatch) => {
+    const response = await api.reqProject();
+    const result = response.data;
+    if (result.code === 0) {
+      dispatch(switchProject(result.data));
+    } else {
+      dispatch(errorMsg(result.msg));
     }
   };
 };

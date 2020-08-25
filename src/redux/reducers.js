@@ -1,48 +1,70 @@
 /*
 包含多个用于生成新的state 的reducer 函数的模块
 */
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 import {
   AUTH_SUCCESS,
   ERROR_MSG,
   RESET_USER,
+  RECEIVE_USER,
+  RESET_PROJECT,
   SWITCH_PROJECT,
   RECEIVE_PROJECT_LIST,
   RECEIVE_NEW_PROJECT,
-} from "./action-types";
+} from './action-types';
+
+import { getRedirectTo } from '../utils/index';
 
 const initUser = {
-  username: "",
-  email: "",
-  msg: "",
-  redirectTo: "",
+  username: '',
+  email: '',
+  msg: '',
+  redirectTo: '',
 };
 
 function user(state = initUser, action) {
   switch (action.type) {
     case AUTH_SUCCESS:
-      return { ...action.data, redirectTo: "/" };
+      return {
+        ...action.data,
+        redirectTo: getRedirectTo(),
+      };
+    case RECEIVE_USER:
+      return action.data;
     case RESET_USER:
-      return { ...initUser, msg: action.data };
+      return {
+        ...initUser,
+        msg: action.data,
+      };
     case ERROR_MSG:
-      return { ...state, msg: action.data };
+      return {
+        ...state,
+        msg: action.data,
+      };
     default:
       return state;
   }
 }
 
-
 const initProject = {
-  projectName: "",
+  projectName: '',
   startDate: null,
   endDate: null,
-  description: "",
+  description: '',
+  msg: '',
 };
 
-function project(state=initProject, action) {
+function project(state = initProject, action) {
   switch (action.type) {
     case SWITCH_PROJECT:
       return action.data;
+    case RESET_PROJECT:
+      return initProject;
+    case ERROR_MSG:
+      return {
+        ...state,
+        msg: action.data,
+      };
     default:
       return state;
   }

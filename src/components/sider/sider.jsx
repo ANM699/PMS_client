@@ -16,6 +16,8 @@ class Sider extends Component {
   };
 
   render() {
+    const visiable = this.props.visiable;
+    if (!visiable) return null;
     return (
       <Layout.Sider
         trigger={null}

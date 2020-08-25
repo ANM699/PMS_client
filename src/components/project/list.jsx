@@ -1,5 +1,5 @@
-import React from "react";
-import { List, Popconfirm } from "antd";
+import React from 'react';
+import { List, Popconfirm } from 'antd';
 
 const ProjectList = (props) => {
   const data = props.data;
@@ -12,6 +12,7 @@ const ProjectList = (props) => {
           <List.Item.Meta
             title={
               <Popconfirm
+                placement="right"
                 title="选择并切换至该项目？"
                 onConfirm={() => props.onConfirm(item)}
                 okText="确认"
