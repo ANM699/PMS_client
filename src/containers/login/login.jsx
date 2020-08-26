@@ -1,26 +1,30 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { Form, Input, Button, Alert } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import Cookies from 'js-cookie';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { Form, Input, Button, Alert } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
 
-import './login.less';
+import "./login.less";
 
-import { login } from '../../redux/user/actions';
+import { login } from "../../redux/user/actions";
 
 class Login extends Component {
   onFinish = (user) => {
     this.props.login(user);
-    console.log('Success:', user);
+    console.log("Success:", user);
   };
 
   onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
+  };
+
+  toRegister = () => {
+    this.props.history.replace("/register");
   };
 
   render() {
-    const userId = Cookies.get('userId');
+    const userId = Cookies.get("userId");
     const { msg } = this.props.user;
     if (userId) {
       return <Redirect to="/" />;
@@ -46,7 +50,7 @@ class Login extends Component {
                 rules={[
                   {
                     required: true,
-                    message: '请输入用户名！',
+                    message: "请输入用户名！",
                   },
                 ]}
               >
@@ -60,7 +64,7 @@ class Login extends Component {
                 rules={[
                   {
                     required: true,
-                    message: '请输入密码！',
+                    message: "请输入密码！",
                   },
                 ]}
               >
@@ -73,7 +77,9 @@ class Login extends Component {
                 <Button type="primary" htmlType="submit">
                   登录
                 </Button>
-                <Button htmlType="button">注册</Button>
+                <Button htmlType="button" onClick={this.toRegister}>
+                  注册账号
+                </Button>
               </Form.Item>
             </Form>
           </div>

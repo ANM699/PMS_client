@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import Cookies from 'js-cookie';
-import { Redirect, Switch, Route } from 'react-router-dom';
-import { Layout, Modal } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import Cookies from "js-cookie";
+import { Redirect, Switch, Route } from "react-router-dom";
+import { Layout, Modal } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { connect } from "react-redux";
 
-import './main.less';
+import "./main.less";
 
-import Sider from '../../components/sider/sider';
-import Header from '../../components/header/header';
-import MyProjects from '../my-projects/my-projects';
-import ProjectProfile from '../project/profile/profile';
-import NotFound from '../exception/not-found';
-import { resetUser, getUser } from '../../redux/user/actions';
-import { resetProject, getProject } from '../../redux/project/actions';
+import Sider from "../../components/sider/sider";
+import Header from "../../components/header/header";
+import MyProjects from "../my-projects/my-projects";
+import ProjectProfile from "../project/profile/profile";
+import NotFound from "../exception/not-found";
+import { resetUser, getUser } from "../../redux/user/actions";
+import { resetProject, getProject } from "../../redux/project/actions";
 
 const { Content } = Layout;
 
@@ -31,13 +31,13 @@ class Main extends Component {
   logout = () => {
     let that = this;
     Modal.confirm({
-      title: '确认退出登录吗？',
+      title: "确认退出登录吗？",
       icon: <ExclamationCircleOutlined />,
-      cancelText: '取消',
-      okText: '确定',
+      cancelText: "取消",
+      okText: "确定",
       onOk() {
-        Cookies.remove('projectId');
-        Cookies.remove('userId');
+        Cookies.remove("projectId");
+        Cookies.remove("userId");
         that.props.resetUser();
         that.props.resetProject();
       },
@@ -45,21 +45,21 @@ class Main extends Component {
   };
 
   componentDidMount() {
-    const userId = Cookies.get('userId');
+    const userId = Cookies.get("userId");
     if (userId && !this.props.user._id) {
       this.props.getUser();
     }
 
-    const projectId = Cookies.get('projectId');
+    const projectId = Cookies.get("projectId");
     if (projectId && !this.props.project._id) {
       this.props.getProject();
     }
   }
 
   render() {
-    const userId = Cookies.get('userId');
-    const projectId = Cookies.get('projectId');
-    const visiable = this.props.location.pathname === '/' ? false : true;
+    const userId = Cookies.get("userId");
+    const projectId = Cookies.get("projectId");
+    const visiable = this.props.location.pathname === "/" ? false : true;
     if (!userId) {
       return <Redirect to="/login" />;
     }
@@ -73,6 +73,7 @@ class Main extends Component {
         <Layout>
           <Header
             projectName={this.props.project.projectName}
+            username={this.props.user.username}
             collapsed={this.state.collapsed}
             toggle={visiable ? this.toggle : null}
             logout={this.logout}

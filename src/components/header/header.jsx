@@ -1,12 +1,13 @@
-import React from 'react';
-import { Layout } from 'antd';
+import React from "react";
+import { Layout, Avatar } from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   LogoutOutlined,
-} from '@ant-design/icons';
+  UserOutlined,
+} from "@ant-design/icons";
 
-import './header.less';
+import "./header.less";
 
 const Header = (props) => {
   return (
@@ -14,11 +15,18 @@ const Header = (props) => {
       {React.createElement(
         props.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
         {
-          className: 'trigger',
+          className: "trigger",
           onClick: props.toggle,
         }
       )}
       <div className="title">{props.projectName}</div>
+      <div>
+        <Avatar
+          style={{ backgroundColor: "#00a2ae", marginRight: 8 }}
+          icon={<UserOutlined />}
+        />
+        {props.username}
+      </div>
       <LogoutOutlined className="logout" onClick={props.logout} />
     </Layout.Header>
   );
