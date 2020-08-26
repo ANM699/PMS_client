@@ -10,7 +10,7 @@ import {
   createProject,
   getProjectList,
   switchProject,
-} from '../../redux/actions';
+} from '../../redux/project/actions';
 
 class MyProjects extends Component {
   state = {

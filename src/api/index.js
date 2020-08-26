@@ -1,7 +1,7 @@
 import ajax from './ajax';
 
-export const reqLogin = ({ email, password }) => {
-  return ajax('users/login', { email, password }, 'POST');
+export const reqLogin = ({ username, password }) => {
+  return ajax('users/login', { username, password }, 'POST');
 };
 
 export const reqUser = () => {
