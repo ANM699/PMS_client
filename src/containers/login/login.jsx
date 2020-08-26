@@ -70,9 +70,10 @@ class Login extends Component {
                 />
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="login">
+                <Button type="primary" htmlType="submit">
                   登录
                 </Button>
+                <Button htmlType="button">注册</Button>
               </Form.Item>
             </Form>
           </div>
