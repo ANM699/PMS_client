@@ -5,8 +5,6 @@ import { Layout, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 
-import "./main.less";
-
 import Sider from "../../components/sider/sider";
 import Header from "../../components/header/header";
 import MyProjects from "../my-projects/my-projects";
@@ -70,7 +68,7 @@ class Main extends Component {
     return (
       <Layout>
         <Sider visiable={visiable} collapsed={this.state.collapsed} />
-        <Layout>
+        <Layout style={{ minHeight: "100vh" }}>
           <Header
             projectName={this.props.project.projectName}
             username={this.props.user.username}
@@ -78,7 +76,7 @@ class Main extends Component {
             toggle={visiable ? this.toggle : null}
             logout={this.logout}
           />
-          <Content className="container">
+          <Content style={{ padding: "24px" }}>
             <Switch>
               <Route exact path="/" component={MyProjects}></Route>
               <Route path="/project/profile" component={ProjectProfile}></Route>

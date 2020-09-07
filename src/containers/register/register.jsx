@@ -5,7 +5,7 @@ import { Form, Input, Button, Alert } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Cookies from "js-cookie";
 
-import "./register.less";
+import styles from "../login/login.module.less";
 
 import { register } from "../../redux/user/actions";
 
@@ -30,9 +30,9 @@ class Register extends Component {
       return <Redirect to="/" />;
     }
     return (
-      <div className="container">
-        <div className="content">
-          <div className="main">
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <div className={styles.main}>
             <Form
               wrapperCol={{ span: 24 }}
               name="loginForm"
@@ -88,7 +88,7 @@ class Register extends Component {
                 />
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button className={styles.btn} type="primary" htmlType="submit">
                   注册
                 </Button>
                 <Button htmlType="button" onClick={this.toLogin}>

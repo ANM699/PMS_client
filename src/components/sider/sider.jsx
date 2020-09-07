@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Layout, Menu } from 'antd';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import React, { Component } from "react";
+import { Layout, Menu } from "antd";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import './sider.less';
+import styles from "./sider.module.less";
 
 class Sider extends Component {
   static propTypes = {
@@ -23,10 +23,10 @@ class Sider extends Component {
         trigger={null}
         collapsible
         collapsed={this.props.collapsed}
-        className="sider"
+        className={styles.sider}
       >
-        <div className="logo">PMS</div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+        <div className={styles.logo}>PMS</div>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
           {/* <Menu.Item
             key="1"
             icon={<UserOutlined />}
@@ -40,7 +40,7 @@ class Sider extends Component {
             key="2"
             icon={<VideoCameraOutlined />}
             onClick={() => {
-              this.props.history.replace('/project/profile');
+              this.props.history.replace("/project/profile");
             }}
           >
             项目信息&状态

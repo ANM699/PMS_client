@@ -7,19 +7,19 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 
-import "./header.less";
+import styles from "./header.module.less";
 
 const Header = (props) => {
   return (
-    <Layout.Header className="header">
+    <Layout.Header className={styles.header}>
       {React.createElement(
         props.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
         {
-          className: "trigger",
+          className: styles.trigger,
           onClick: props.toggle,
         }
       )}
-      <div className="title">{props.projectName}</div>
+      <div className={styles.title}>{props.projectName}</div>
       <div>
         <Avatar
           style={{ backgroundColor: "#00a2ae", marginRight: 8 }}
@@ -27,7 +27,7 @@ const Header = (props) => {
         />
         {props.username}
       </div>
-      <LogoutOutlined className="logout" onClick={props.logout} />
+      <LogoutOutlined className={styles.logout} onClick={props.logout} />
     </Layout.Header>
   );
 };
