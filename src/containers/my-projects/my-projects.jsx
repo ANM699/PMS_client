@@ -26,7 +26,7 @@ class MyProjects extends Component {
   handleConfirm = (item) => {
     this.props.switchProject(item);
     Cookies.set("projectId", item._id);
-    this.props.history.push("/project/profile");
+    this.props.history.push("/project/backlog");
   };
 
   handleOk = (e) => {

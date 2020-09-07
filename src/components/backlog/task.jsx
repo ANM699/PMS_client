@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import './task.less';
+import React, { Component } from "react";
+import styles from "./task.module.less";
 
 export default class Task extends Component {
   render() {
-    return <div className="wrap">{this.props.task.content}</div>;
+    return <div className={styles.container}>{this.props.task.content}</div>;
   }
 }

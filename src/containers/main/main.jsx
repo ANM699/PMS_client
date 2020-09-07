@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import Sider from "../../components/sider/sider";
 import Header from "../../components/header/header";
 import MyProjects from "../my-projects/my-projects";
+import Backlog from "../project/backlog/backlog";
 import ProjectProfile from "../project/profile/profile";
 import NotFound from "../exception/not-found";
 import { resetUser, getUser } from "../../redux/user/actions";
