@@ -31,11 +31,11 @@ class Sider extends Component {
             key="1"
             icon={<UserOutlined />}
             onClick={() => {
-              this.props.history.replace('/project/list');
+              this.props.history.replace('/project/backlog');
             }}
           >
-            项目列表
-          </Menu.Item> */}
+            Backlog
+          </Menu.Item>
           <Menu.Item
             key="2"
             icon={<VideoCameraOutlined />}

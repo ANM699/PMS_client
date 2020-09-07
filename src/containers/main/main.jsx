@@ -79,6 +79,7 @@ class Main extends Component {
           <Content style={{ padding: "24px" }}>
             <Switch>
               <Route exact path="/" component={MyProjects}></Route>
+              <Route path="/project/backlog" component={Backlog}></Route>
               <Route path="/project/profile" component={ProjectProfile}></Route>
               <Route component={NotFound}></Route>
             </Switch>
