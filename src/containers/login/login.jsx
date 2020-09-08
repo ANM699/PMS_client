@@ -12,7 +12,6 @@ import { login } from "../../redux/user/actions";
 class Login extends Component {
   onFinish = (user) => {
     this.props.login(user);
-    console.log("Success:", user);
   };
 
   onFinishFailed = (errorInfo) => {
