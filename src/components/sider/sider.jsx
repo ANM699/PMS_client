@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { Layout, Menu } from "antd";
-import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
+import React, { Component } from 'react';
+import { Layout, Menu } from 'antd';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import styles from "./sider.module.less";
+import styles from './sider.module.less';
 
 class Sider extends Component {
   static propTypes = {
@@ -26,31 +26,32 @@ class Sider extends Component {
         className={styles.sider}
       >
         <div className={styles.logo}>PMS</div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
           <Menu.Item
             key="1"
-            icon={<UserOutlined />}
-            onClick={() => {
-              this.props.history.replace("/project/backlog");
-            }}
-          >
-            Backlog
-          </Menu.Item>
-          <Menu.Item
-            key="2"
             icon={<VideoCameraOutlined />}
             onClick={() => {
-              this.props.history.replace("/project/profile");
+              this.props.history.replace('/project/profile');
             }}
           >
-            项目信息&状态
+            项目状态
           </Menu.Item>
-          <Menu.Item key="3" icon={<UploadOutlined />}>
+          <Menu.Item key="2" icon={<UploadOutlined />}>
             项目阶段（冲刺周期列表）
           </Menu.Item>
-          <Menu.Item key="4" icon={<UserOutlined />}>
-            项目需求（用户故事，产品订单）
+          <Menu.Item key="3" icon={<UserOutlined />}>
+            用户故事
           </Menu.Item>
+          <Menu.Item
+            key="4"
+            icon={<UserOutlined />}
+            onClick={() => {
+              this.props.history.replace('/project/board');
+            }}
+          >
+            任务看板
+          </Menu.Item>
+
           <Menu.Item key="5" icon={<UserOutlined />}>
             项目成员
           </Menu.Item>

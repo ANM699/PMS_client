@@ -4,11 +4,11 @@
 import { combineReducers } from 'redux';
 
 import { user } from './user/reduces';
-import { project, projectList } from './project/reduces';
+import { project } from './project/reduces';
 
 // 返回合并后的reducer 函数
 export default combineReducers({
   user,
   project,
-  projectList,
+  // projectList,
 });

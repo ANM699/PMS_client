@@ -27,13 +27,13 @@ export function project(state = initProject, action) {
   }
 }
 
-export function projectList(state = [], action) {
-  switch (action.type) {
-    case types.RECEIVE_PROJECT_LIST:
-      return action.data;
-    case types.RECEIVE_NEW_PROJECT:
-      return [action.data, ...state];
-    default:
-      return state;
-  }
-}
+// export function projectList(state = [], action) {
+//   switch (action.type) {
+//     case types.RECEIVE_PROJECT_LIST:
+//       return action.data;
+//     case types.RECEIVE_NEW_PROJECT:
+//       return [action.data, ...state];
+//     default:
+//       return state;
+//   }
+// }
