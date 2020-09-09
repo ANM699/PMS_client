@@ -66,6 +66,7 @@ class MyProjects extends Component {
   componentDidMount() {
     reqProjectList().then((res) => {
       const result = res.data;
+      console.log(result);
       if (result.code === 0) {
         this.setState({
           projectList: result.data,
