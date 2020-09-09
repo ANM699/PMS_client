@@ -28,8 +28,8 @@ export default class Column extends Component {
       // </Droppable>
 
       <div className={styles.container}>
-        <h3 className={styles.title}>{this.props.column.title}</h3>
-        <Droppable droppableId={this.props.column.id}>
+        <h3 className={styles.title}>{this.props.title}</h3>
+        <Droppable droppableId={this.props.id}>
           {(provided, snapshot) => (
             <div
               className={styles.taskList}
@@ -38,7 +38,7 @@ export default class Column extends Component {
               style={getListStyle(snapshot.isDraggingOver)}
             >
               {this.props.tasks.map((task, index) => (
-                <Task key={task.id} task={task} index={index} />
+                <Task key={task._id} task={task} index={index} />
               ))}
               {provided.placeholder}
             </div>

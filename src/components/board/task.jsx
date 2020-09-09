@@ -34,7 +34,7 @@ export default class Task extends Component {
       //     </div>
       //   )}
       // </Draggable>
-      <Draggable draggableId={this.props.task.id} index={this.props.index}>
+      <Draggable draggableId={this.props.task._id} index={this.props.index}>
         {(provided, snapshot) => (
           <div
             className={styles.container}
@@ -46,7 +46,7 @@ export default class Task extends Component {
               provided.draggableProps.style
             )}
           >
-            {this.props.task.content}
+            {this.props.task.taskName}
           </div>
         )}
       </Draggable>

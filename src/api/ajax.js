@@ -1,7 +1,7 @@
 import axios from 'axios';
 import '../mock/mock';
 
-const api = 'http://localhost:3000';
+const api = 'http://mock';
 
 export default function ajax(url = '', data = {}, type = 'GET') {
   if (type === 'GET') {

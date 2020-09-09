@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { Form, Input, Button, Alert } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import Cookies from "js-cookie";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { Form, Input, Button, Alert } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import Cookies from 'js-cookie';
 
-import styles from "./login.module.less";
+import styles from './login.module.less';
 
-import { login } from "../../redux/user/actions";
+import { login } from '../../redux/user/actions';
 
 class Login extends Component {
   onFinish = (user) => {
@@ -15,15 +15,15 @@ class Login extends Component {
   };
 
   onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   toRegister = () => {
-    this.props.history.replace("/register");
+    this.props.history.replace('/register');
   };
 
   render() {
-    const userId = Cookies.get("userId");
+    const userId = Cookies.get('userId');
     const { msg } = this.props.user;
     if (userId) {
       return <Redirect to="/" />;
@@ -49,7 +49,7 @@ class Login extends Component {
                 rules={[
                   {
                     required: true,
-                    message: "请输入用户名！",
+                    message: '请输入用户名！',
                   },
                 ]}
               >
@@ -63,7 +63,7 @@ class Login extends Component {
                 rules={[
                   {
                     required: true,
-                    message: "请输入密码！",
+                    message: '请输入密码！',
                   },
                 ]}
               >
