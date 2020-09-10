@@ -17,14 +17,17 @@ class Sider extends Component {
 
   render() {
     const visiable = this.props.visiable;
-    // if (!visiable) return null;
+    if (!visiable) return null;
     return (
       <Layout.Sider
         trigger={null}
         collapsible
         collapsed={this.props.collapsed}
         className={styles.sider}
-        style={{ display: visiable ? '' : 'none' }}
+        style={{
+          position: 'fixed',
+          left: 0,
+        }}
       >
         <div className={styles.logo}>PMS</div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>

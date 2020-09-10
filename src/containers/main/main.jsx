@@ -66,12 +66,19 @@ class Main extends Component {
       return <Redirect to="/" />;
     }
 
+    const marginLeft = visiable ? (this.state.collapsed ? 80 : 200) : 0;
+
     return (
-      <Layout
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
-      >
+      <Layout>
         <Sider visiable={visiable} collapsed={this.state.collapsed} />
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout
+          style={{
+            minHeight: '100vh',
+            overflow: 'visible',
+            marginLeft,
+            transition: 'all 0.2s',
+          }}
+        >
           <Header
             projectName={this.props.project.projectName}
             username={this.props.user.username}
