@@ -58,7 +58,8 @@ class Main extends Component {
   render() {
     const userId = Cookies.get("userId");
     const projectId = Cookies.get("projectId");
-    const visiable = this.props.location.pathname === "/" ? false : true;
+    const visiable =
+      this.props.location.pathname === "/" && !projectId ? false : true;
     if (!userId) {
       return <Redirect to="/login" />;
     }

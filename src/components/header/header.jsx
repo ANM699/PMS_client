@@ -1,5 +1,6 @@
 import React from "react";
 import { Layout, Avatar } from "antd";
+import { Link } from "react-router-dom";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -19,7 +20,9 @@ const Header = (props) => {
           onClick: props.toggle,
         }
       )}
-      <div className={styles.title}>{props.projectName}</div>
+      <div className={styles.title}>
+        <Link to="/">{props.projectName}</Link>
+      </div>
       <div>
         <Avatar
           style={{ backgroundColor: "#00a2ae", marginRight: 8 }}
