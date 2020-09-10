@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import React, { Component } from "react";
+import { Draggable } from "react-beautiful-dnd";
 
-import styles from './task.module.less';
+import styles from "./task.module.less";
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   // change background colour if dragging
-  background: isDragging ? 'lightgreen' : 'grey',
+  background: isDragging ? "lightgreen" : "",
 
   // styles we need to apply on draggables
   ...draggableStyle,
