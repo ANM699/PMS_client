@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Layout, Menu } from 'antd';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import React, { Component } from "react";
+import { Layout, Menu } from "antd";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import styles from './sider.module.less';
+import styles from "./sider.module.less";
 
 class Sider extends Component {
   static propTypes = {
@@ -17,7 +17,7 @@ class Sider extends Component {
 
   render() {
     const visiable = this.props.visiable;
-    if (!visiable) return null;
+    // if (!visiable) return null;
     return (
       <Layout.Sider
         trigger={null}
@@ -25,17 +25,16 @@ class Sider extends Component {
         collapsed={this.props.collapsed}
         className={styles.sider}
         style={{
-          position: 'fixed',
-          left: 0,
+          display: visiable ? "" : "none",
         }}
       >
         <div className={styles.logo}>PMS</div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
           <Menu.Item
             key="1"
             icon={<VideoCameraOutlined />}
             onClick={() => {
-              this.props.history.replace('/project/profile');
+              this.props.history.replace("/project/profile");
             }}
           >
             项目状态
@@ -50,7 +49,7 @@ class Sider extends Component {
             key="4"
             icon={<UserOutlined />}
             onClick={() => {
-              this.props.history.replace('/project/board');
+              this.props.history.replace("/project/board");
             }}
           >
             任务看板
