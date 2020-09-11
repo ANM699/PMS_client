@@ -85,13 +85,20 @@ Mock.mock(`${api}/tasks/list`, 'get', function () {
   return {
     code: 0,
     ...Mock.mock({
-      'data|20-30': [
+      'data|10-20': [
         {
           _id: '@id',
           taskName: '@csentence',
           'status|1': ['todo', 'doing', 'done'],
           storyId: '@id',
           projectId: Cookies.get('projectId'),
+          'users|0-5': [
+            {
+              _id: '@id',
+              'avatar|1': ['#f56a00', '#7265e6', '#00a2ae'],
+              username: '@last',
+            },
+          ],
         },
       ],
     }),

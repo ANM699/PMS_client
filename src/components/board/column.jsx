@@ -1,25 +1,25 @@
-import React, { Component } from "react";
-import { Droppable } from "react-beautiful-dnd";
-import Task from "./task";
+import React, { Component } from 'react';
+import { Droppable } from 'react-beautiful-dnd';
+import Task from './task';
 
-import styles from "./column.module.less";
+import styles from './column.module.less';
 
 const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? "lightblue" : "",
+  background: isDraggingOver ? 'lightblue' : '',
 });
 
 export default class Column extends Component {
   render() {
     let backgroundColor;
     switch (this.props.id) {
-      case "todo":
-        backgroundColor = "red";
+      case 'todo':
+        backgroundColor = '#4a9ff9';
         break;
-      case "doing":
-        backgroundColor = "yellow";
+      case 'doing':
+        backgroundColor = '#f9944a';
         break;
-      case "done":
-        backgroundColor = "lightgreen";
+      case 'done':
+        backgroundColor = '#2ac06d';
         break;
       default:
         break;
