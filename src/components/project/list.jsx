@@ -1,5 +1,6 @@
-import React from 'react';
-import { List, Popconfirm } from 'antd';
+import React from "react";
+import { List, Popconfirm } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 const ProjectList = (props) => {
   const data = props.data;
@@ -8,7 +9,13 @@ const ProjectList = (props) => {
       size="large"
       dataSource={data}
       renderItem={(item) => (
-        <List.Item actions={[<a key="edit">编辑</a>]}>
+        <List.Item
+          actions={[
+            <a key="edit">
+              <EditOutlined />
+            </a>,
+          ]}
+        >
           <List.Item.Meta
             title={
               <Popconfirm

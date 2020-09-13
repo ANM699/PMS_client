@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
-import { Card, Avatar, Tooltip } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import styles from './task.module.less';
+import React, { Component } from "react";
+import { Draggable } from "react-beautiful-dnd";
+import { Card, Avatar, Tooltip } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import styles from "./task.module.less";
 
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // change background colour if dragging
-  background: isDragging ? 'lightgreen' : '',
-  // styles we need to apply on draggables
-  ...draggableStyle,
-});
+// const getItemStyle = (isDragging, draggableStyle) => ({
+//   // change background colour if dragging
+//   background: isDragging ? 'lightgreen' : '',
+//   // styles we need to apply on draggables
+//   ...draggableStyle,
+// });
 
 export default class Task extends Component {
   render() {
@@ -28,7 +28,7 @@ export default class Task extends Component {
           >
             <Card hoverable={true}>
               <p>{this.props.task.taskName}</p>
-              <div style={{ textAlign: 'right' }}>
+              <div style={{ textAlign: "right" }}>
                 <Avatar.Group>
                   {this.props.task.users.map((user) => (
                     <Tooltip

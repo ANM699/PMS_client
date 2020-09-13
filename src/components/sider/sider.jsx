@@ -3,9 +3,13 @@ import { Layout, Menu } from "antd";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  TeamOutlined,
+  ProjectOutlined,
+  AreaChartOutlined,
+  CarryOutOutlined,
+  SolutionOutlined,
+  ProfileOutlined,
+  SnippetsOutlined,
 } from "@ant-design/icons";
 
 import styles from "./sider.module.less";
@@ -15,8 +19,51 @@ class Sider extends Component {
     collapsed: PropTypes.bool.isRequired,
   };
 
+  menuList = [
+    // 包含所有导航组件的相关信息数据
+    {
+      path: "/project/profile",
+      title: "项目状态",
+      icon: <ProfileOutlined />,
+    },
+    {
+      path: "/project/member",
+      title: "成员管理",
+      icon: <TeamOutlined />,
+    },
+    {
+      path: "/project/meeting",
+      title: "会议纪要",
+      icon: <SnippetsOutlined />,
+    },
+    {
+      path: "/project/story",
+      title: "用户故事",
+      icon: <SolutionOutlined />,
+    },
+    {
+      path: "",
+      title: "项目阶段（冲刺周期列表）",
+      icon: <CarryOutOutlined />,
+    },
+    {
+      path: "/project/board",
+      title: "任务看板",
+      icon: <ProjectOutlined />,
+    },
+    {
+      path: "",
+      title: "燃尽图",
+      icon: <AreaChartOutlined />,
+    },
+  ];
+
   render() {
     const visiable = this.props.visiable;
+    const currentPath = this.props.history.location.pathname;
+    const selectedMenu = this.menuList
+      .findIndex((menu) => menu.path === currentPath)
+      .toString();
     // if (!visiable) return null;
     return (
       <Layout.Sider
@@ -29,41 +76,18 @@ class Sider extends Component {
         }}
       >
         <div className={styles.logo}>PMS</div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item
-            key="1"
-            icon={<VideoCameraOutlined />}
-            onClick={() => {
-              this.props.history.replace("/project/profile");
-            }}
-          >
-            项目状态
-          </Menu.Item>
-          <Menu.Item key="2" icon={<UploadOutlined />}>
-            项目阶段（冲刺周期列表）
-          </Menu.Item>
-          <Menu.Item key="3" icon={<UserOutlined />}>
-            用户故事
-          </Menu.Item>
-          <Menu.Item
-            key="4"
-            icon={<UserOutlined />}
-            onClick={() => {
-              this.props.history.replace("/project/board");
-            }}
-          >
-            任务看板
-          </Menu.Item>
-
-          <Menu.Item key="5" icon={<UserOutlined />}>
-            项目成员
-          </Menu.Item>
-          <Menu.Item key="6" icon={<UserOutlined />}>
-            会议纪要
-          </Menu.Item>
-          <Menu.Item key="7" icon={<UserOutlined />}>
-            燃尽图&看板
-          </Menu.Item>
+        <Menu theme="dark" mode="inline" selectedKeys={[selectedMenu]}>
+          {this.menuList.map((menu, index) => (
+            <Menu.Item
+              key={index}
+              icon={menu.icon}
+              onClick={() => {
+                if (menu.path) this.props.history.replace(menu.path);
+              }}
+            >
+              {menu.title}
+            </Menu.Item>
+          ))}
         </Menu>
       </Layout.Sider>
     );

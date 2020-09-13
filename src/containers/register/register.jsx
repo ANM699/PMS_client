@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
-import { Form, Input, Button, Alert } from "antd";
+import { Form, Input, Button, Alert, Space } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Cookies from "js-cookie";
 
@@ -88,12 +88,14 @@ class Register extends Component {
                 />
               </Form.Item>
               <Form.Item>
-                <Button className={styles.btn} type="primary" htmlType="submit">
-                  注册
-                </Button>
-                <Button htmlType="button" onClick={this.toLogin}>
-                  已有账号
-                </Button>
+                <Space>
+                  <Button type="primary" htmlType="submit">
+                    注册
+                  </Button>
+                  <Button htmlType="button" onClick={this.toLogin}>
+                    已有账号
+                  </Button>
+                </Space>
               </Form.Item>
             </Form>
           </div>

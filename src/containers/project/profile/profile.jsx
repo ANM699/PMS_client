@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-export default class projectProfile extends Component {
+export default class Profile extends Component {
   render() {
-    return <div>project-profile</div>;
+    return <div>profile</div>;
   }
 }

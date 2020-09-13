@@ -8,8 +8,11 @@ import { connect } from "react-redux";
 import Sider from "../../components/sider/sider";
 import Header from "../../components/header/header";
 import MyProjects from "../my-projects/my-projects";
+import Meeting from "../project/meeting/meeting";
 import Board from "../project/board/board";
-import ProjectProfile from "../project/profile/profile";
+import Member from "../project/member/member";
+import Story from "../project/story/story";
+import Profile from "../project/profile/profile";
 import NotFound from "../exception/not-found";
 import { resetUser, getUser } from "../../redux/user/actions";
 import { resetProject, getProject } from "../../redux/project/actions";
@@ -20,6 +23,37 @@ class Main extends Component {
   state = {
     collapsed: false,
   };
+
+  navList = [
+    {
+      path: "/",
+      component: MyProjects,
+      exact: true,
+    },
+    {
+      path: "/project/profile",
+      component: Profile,
+    },
+    {
+      path: "/project/member",
+      component: Member,
+    },
+    {
+      path: "/project/meeting",
+      component: Meeting,
+    },
+    {
+      path: "/project/story",
+      component: Story,
+    },
+    {
+      path: "/project/board",
+      component: Board,
+    },
+    {
+      component: NotFound,
+    },
+  ];
 
   toggle = () => {
     this.setState({
@@ -84,10 +118,9 @@ class Main extends Component {
           />
           <Content style={{ padding: "24px", minHeight: "auto" }}>
             <Switch>
-              <Route exact path="/" component={MyProjects}></Route>
-              <Route path="/project/profile" component={ProjectProfile}></Route>
-              <Route path="/project/board" component={Board}></Route>
-              <Route component={NotFound}></Route>
+              {this.navList.map((nav, index) => (
+                <Route key={index} {...nav} />
+              ))}
             </Switch>
           </Content>
         </Layout>
