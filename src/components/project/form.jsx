@@ -1,17 +1,17 @@
-import React from "react";
-import { Form, Input, DatePicker } from "antd";
+import React from 'react';
+import { Form, Input, DatePicker } from 'antd';
 
 const { RangePicker } = DatePicker;
 
-const ProjectForm = (props) => {
+export default function ProjectForm(props) {
   return (
     <Form
       ref={props.formRef}
       labelCol={{
-        span: 7,
+        span: 5,
       }}
       wrapperCol={{
-        span: 13,
+        span: 16,
       }}
     >
       <Form.Item
@@ -20,7 +20,7 @@ const ProjectForm = (props) => {
         rules={[
           {
             required: true,
-            message: "请输入项目名称！",
+            message: '请输入项目名称！',
           },
         ]}
       >
@@ -32,13 +32,13 @@ const ProjectForm = (props) => {
         rules={[
           {
             required: true,
-            message: "请选择选择项目时间！",
+            message: '请选择选择项目时间！',
           },
         ]}
       >
         <RangePicker
           style={{
-            width: "100%",
+            width: '100%',
           }}
         />
       </Form.Item>
@@ -48,7 +48,7 @@ const ProjectForm = (props) => {
         rules={[
           {
             required: true,
-            message: "请输入至少五个字符的项目简介！",
+            message: '请输入至少五个字符的项目简介！',
             min: 5,
           },
         ]}
@@ -57,6 +57,4 @@ const ProjectForm = (props) => {
       </Form.Item>
     </Form>
   );
-};
-
-export default ProjectForm;
+}

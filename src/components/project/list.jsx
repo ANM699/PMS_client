@@ -1,8 +1,8 @@
-import React from "react";
-import { List, Popconfirm } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import React from 'react';
+import { List, Popconfirm } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 
-const ProjectList = (props) => {
+export default function ProjectList(props) {
   const data = props.data;
   return (
     <List
@@ -34,6 +34,4 @@ const ProjectList = (props) => {
       )}
     />
   );
-};
-
-export default ProjectList;
+}

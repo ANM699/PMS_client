@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
+import React, { Component } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd';
 
-import Column from "../../../components/board/column";
-import { reqTaskList } from "../../../api/index";
+import Column from '../../../components/board/column';
+import { reqTaskList } from '../../../api/index';
 
 export default class Board extends Component {
   state = {
@@ -86,7 +86,7 @@ export default class Board extends Component {
       //   </div>
       // </DragDropContext>
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: 'flex' }}>
           <Column title="未开始" id="todo" tasks={tasks.todo} />
           <Column title="进行中" id="doing" tasks={tasks.doing} />
           <Column title="已完成" id="done" tasks={tasks.done} />
