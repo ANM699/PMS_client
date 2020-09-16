@@ -33,7 +33,7 @@ class Sider extends Component {
     },
     {
       path: "/project/story",
-      title: "需求管理",
+      title: "需求分析",
       icon: <SolutionOutlined />,
     },
     {

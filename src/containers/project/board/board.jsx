@@ -1,11 +1,18 @@
 import React, { Component } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import { Card } from "antd";
+import { Card, Table, Avatar, Tooltip } from "antd";
+import {
+  UnorderedListOutlined,
+  ProjectOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import Column from "../../../components/board/column";
 import { reqTaskList } from "../../../api/index";
 
 export default class Board extends Component {
   state = {
+    isBoardView: true,
+    originalTasks: [],
     tasks: {
       todo: [],
       doing: [],
@@ -17,17 +24,24 @@ export default class Board extends Component {
     reqTaskList().then((res) => {
       const result = res.data;
       if (result.code === 0) {
+        const originalTasks = result.data;
         const tasks = this.state.tasks;
-        result.data.forEach((task) => {
+        originalTasks.forEach((task) => {
           tasks[task.status].push(task);
         });
         // console.log(tasks);
         this.setState({
           tasks,
+          originalTasks,
         });
       }
     });
   }
+
+  toggleView = () => {
+    const isBoardView = !this.state.isBoardView;
+    this.setState({ isBoardView });
+  };
 
   /*方案1:如果需要将所有任务tasks作为store的一个属性，这里拖拽完后应该直接更新store.tasks的status，让页面自动重新渲染，但是会没有排序功能。
   方案2:只是在前端更新组件state的tasks，拖拽后直接调用接口更新被拖拽任务的status,同时可以实现排序功能（实际没什么意义，刷新后顺序会变）。
@@ -35,7 +49,6 @@ export default class Board extends Component {
 
   //方案2
   onDragEnd = (result) => {
-    console.log(result);
     const { destination, source, draggableId } = result;
 
     if (!destination) {
@@ -56,9 +69,13 @@ export default class Board extends Component {
     const draggedTask = this.state.tasks[start].find(
       (task) => task._id === draggableId
     );
+    const draggedTaskInOriginalTasks = this.state.originalTasks.find(
+      (task) => task._id === draggableId
+    );
 
     //todo：更新draggedTask的状态：更新后端数据库，如果成功再更新state
     draggedTask.status = finish;
+    draggedTaskInOriginalTasks.status = finish;
 
     const { tasks } = this.state;
     const startTasks = tasks[start];
@@ -71,28 +88,63 @@ export default class Board extends Component {
       tasks,
     });
   };
+
   render() {
-    const { tasks } = this.state;
+    const { originalTasks, tasks, isBoardView } = this.state;
+
+    const boardView = (
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <div style={{ display: "flex" }}>
+          <Column title="未开始" id="todo" tasks={tasks.todo} />
+          <Column title="进行中" id="doing" tasks={tasks.doing} />
+          <Column title="已完成" id="done" tasks={tasks.done} />
+        </div>
+      </DragDropContext>
+    );
+
+    const listView = (
+      <Table
+        dataSource={originalTasks}
+        pagination={false}
+        showHeader={false}
+        rowKey="_id"
+      >
+        <Column title="任务内容" dataIndex="content" key="content" />
+        <Column
+          title="参与者"
+          dataIndex="users"
+          key="users"
+          render={(users) => (
+            <Avatar.Group>
+              {users.map((user) => (
+                <Tooltip key={user._id} title={user.username} placement="top">
+                  <Avatar
+                    style={{ backgroundColor: user.avatar }}
+                    icon={<UserOutlined />}
+                  />
+                </Tooltip>
+              ))}
+            </Avatar.Group>
+          )}
+        />
+        <Column title="状态" dataIndex="status" key="status" />
+      </Table>
+    );
+
     return (
-      // <DragDropContext onDragEnd={this.onDragEnd}>
-      //   <div style={{ display: 'flex' }}>
-      //     {this.state.columnOrder.map((columnId) => {
-      //       const column = this.state.columns[columnId];
-      //       const tasks = column.taskIds.map(
-      //         (taskId) => this.state.tasks[taskId]
-      //       );
-      //       return <Column key={column.id} column={column} tasks={tasks} />;
-      //     })}
-      //   </div>
-      // </DragDropContext>
-      <Card title="周期1">
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <div style={{ display: "flex" }}>
-            <Column title="未开始" id="todo" tasks={tasks.todo} />
-            <Column title="进行中" id="doing" tasks={tasks.doing} />
-            <Column title="已完成" id="done" tasks={tasks.done} />
-          </div>
-        </DragDropContext>
+      <Card
+        title="周期1"
+        extra={
+          <a onClick={this.toggleView}>
+            {isBoardView ? (
+              <UnorderedListOutlined style={{ fontSize: "20px" }} />
+            ) : (
+              <ProjectOutlined style={{ fontSize: "20px" }} />
+            )}
+          </a>
+        }
+      >
+        {isBoardView ? boardView : listView}
       </Card>
     );
   }

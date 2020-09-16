@@ -27,7 +27,7 @@ export default class Task extends Component {
             // )}
           >
             <Card hoverable={true}>
-              <p>{this.props.task.taskName}</p>
+              <p>{this.props.task.content}</p>
               <div style={{ textAlign: "right" }}>
                 <Avatar.Group>
                   {this.props.task.users.map((user) => (

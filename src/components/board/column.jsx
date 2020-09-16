@@ -26,9 +26,9 @@ export default class Column extends Component {
     }
     return (
       <div className={styles.container}>
-        <h3 className={styles.title} style={{ backgroundColor }}>
+        <h4 className={styles.title} style={{ backgroundColor }}>
           {this.props.title}
-        </h3>
+        </h4>
         <Droppable droppableId={this.props.id}>
           {(provided) => (
             <div
