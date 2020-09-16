@@ -198,7 +198,7 @@ export default class Member extends Component {
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          okText="保存"
+          okText="确定"
           cancelText="取消"
         >
           <MemberForm

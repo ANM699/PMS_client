@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import Cookies from "js-cookie";
-import { Card, Modal } from "antd";
-import { PlusCircleFilled } from "@ant-design/icons";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Cookies from 'js-cookie';
+import { Card, Modal } from 'antd';
+import { PlusCircleFilled } from '@ant-design/icons';
 
-import ProjectList from "../../components/project/list";
-import ProjectForm from "../../components/project/form";
+import ProjectList from '../../components/project/list';
+import ProjectForm from '../../components/project/form';
 import {
   // createProject,
   // getProjectList,
   switchProject,
-} from "../../redux/project/actions";
-import { reqProjectList, reqCreateProject } from "../../api/index";
+} from '../../redux/project/actions';
+import { reqProjectList, reqCreateProject } from '../../api/index';
 
 class MyProjects extends Component {
   state = {
@@ -27,17 +27,18 @@ class MyProjects extends Component {
 
   handleConfirm = (item) => {
     this.props.switchProject(item);
-    Cookies.set("projectId", item._id);
-    this.props.history.push("/project/profile");
+    //todo:重置store.state中的sprints
+    Cookies.set('projectId', item._id);
+    this.props.history.push('/project/profile');
   };
 
   handleOk = (e) => {
     this.form
       .validateFields()
       .then((value) => {
-        const rangeDate = value["rangeDate"];
-        value.startDate = rangeDate[0].format("YYYY-MM-DD");
-        value.endDate = rangeDate[1].format("YYYY-MM-DD");
+        const rangeDate = value['rangeDate'];
+        value.startDate = rangeDate[0].format('YYYY-MM-DD');
+        value.endDate = rangeDate[1].format('YYYY-MM-DD');
         // this.props.createProject(value);
         reqCreateProject(value).then((res) => {
           const result = res.data;
@@ -51,7 +52,7 @@ class MyProjects extends Component {
         });
       })
       .catch((info) => {
-        console.log("验证失败：", info);
+        console.log('验证失败：', info);
       });
   };
 
@@ -83,7 +84,7 @@ class MyProjects extends Component {
           title="我的项目"
           extra={
             <a onClick={this.showModal}>
-              <PlusCircleFilled style={{ fontSize: "32px" }} />
+              <PlusCircleFilled style={{ fontSize: '32px' }} />
             </a>
           }
         >
@@ -107,7 +108,7 @@ class MyProjects extends Component {
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          okText="保存"
+          okText="确定"
           cancelText="取消"
         >
           <ProjectForm formRef={(el) => (this.form = el)}></ProjectForm>

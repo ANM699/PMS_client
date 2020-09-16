@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 
+import TaskProgress from '../../../components/task-progress/task-progress';
+
 export default class Meeting extends Component {
-  componentDidMount() {
-    console.log('componentDidMount');
-  }
-  componentDidUpdate() {
-    console.log('componentDidUpdate');
-  }
   render() {
-    console.log('render');
-    return <div>meeting</div>;
+    return <TaskProgress todo={3} doing={5} done={4} />;
   }
 }
