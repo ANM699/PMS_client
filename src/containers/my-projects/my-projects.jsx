@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
 import { Card, Modal } from 'antd';
-import { PlusCircleFilled } from '@ant-design/icons';
+import { PlusCircleFilled, ExclamationCircleOutlined } from '@ant-design/icons';
 
 import ProjectList from '../../components/project/list';
 import ProjectForm from '../../components/project/form';
@@ -26,10 +26,19 @@ class MyProjects extends Component {
   };
 
   handleConfirm = (item) => {
-    this.props.switchProject(item);
-    //todo:重置store.state中的sprints
-    Cookies.set('projectId', item._id);
-    this.props.history.push('/project/profile');
+    let that = this;
+    Modal.confirm({
+      title: '选择并切换至该项目？',
+      icon: <ExclamationCircleOutlined />,
+      cancelText: '取消',
+      okText: '确定',
+      onOk() {
+        that.props.switchProject(item);
+        //todo:重置store.state中的sprints
+        Cookies.set('projectId', item._id);
+        that.props.history.push('/project/profile');
+      },
+    });
   };
 
   handleOk = (e) => {

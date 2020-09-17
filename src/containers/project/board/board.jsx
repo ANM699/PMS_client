@@ -1,18 +1,34 @@
-import React, { Component } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
-import { Card, Table, Avatar, Tooltip } from "antd";
+import React, { Component } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { Card, Table, Avatar, Tooltip, Tag } from 'antd';
 import {
   UnorderedListOutlined,
   ProjectOutlined,
   UserOutlined,
-} from "@ant-design/icons";
-import Column from "../../../components/board/column";
-import { reqTaskList } from "../../../api/index";
+} from '@ant-design/icons';
+import Column from '../../../components/board/column';
+import List from '../../../components/board/list';
+import { reqTaskList } from '../../../api/index';
+
+const status = {
+  todo: {
+    color: '#4a9ff9',
+    display: '未开始',
+  },
+  doing: {
+    color: '#f9944a',
+    display: '进行中',
+  },
+  done: {
+    color: '#2ac06d',
+    display: '已完成',
+  },
+};
 
 export default class Board extends Component {
   state = {
     isBoardView: true,
-    originalTasks: [],
+    // originalTasks: [],
     tasks: {
       todo: [],
       doing: [],
@@ -32,7 +48,7 @@ export default class Board extends Component {
         // console.log(tasks);
         this.setState({
           tasks,
-          originalTasks,
+          // originalTasks,
         });
       }
     });
@@ -69,13 +85,13 @@ export default class Board extends Component {
     const draggedTask = this.state.tasks[start].find(
       (task) => task._id === draggableId
     );
-    const draggedTaskInOriginalTasks = this.state.originalTasks.find(
-      (task) => task._id === draggableId
-    );
+    // const draggedTaskInOriginalTasks = this.state.originalTasks.find(
+    //   (task) => task._id === draggableId
+    // );
 
     //todo：更新draggedTask的状态：更新后端数据库，如果成功再更新state
     draggedTask.status = finish;
-    draggedTaskInOriginalTasks.status = finish;
+    // draggedTaskInOriginalTasks.status = finish;
 
     const { tasks } = this.state;
     const startTasks = tasks[start];
@@ -90,56 +106,30 @@ export default class Board extends Component {
   };
 
   render() {
-    const { originalTasks, tasks, isBoardView } = this.state;
+    const { tasks, isBoardView } = this.state;
+    const tasksOfList = Object.values(tasks).flat();
 
     const boardView = (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <div style={{ display: "flex" }}>
-          <Column title="未开始" id="todo" tasks={tasks.todo} />
-          <Column title="进行中" id="doing" tasks={tasks.doing} />
-          <Column title="已完成" id="done" tasks={tasks.done} />
+        <div style={{ display: 'flex' }}>
+          {Object.keys(tasks).map((c, index) => (
+            <Column title={status[c]} id={c} key={index} tasks={tasks[c]} />
+          ))}
         </div>
       </DragDropContext>
     );
 
-    const listView = (
-      <Table
-        dataSource={originalTasks}
-        pagination={false}
-        showHeader={false}
-        rowKey="_id"
-      >
-        <Column title="任务内容" dataIndex="content" key="content" />
-        <Column
-          title="参与者"
-          dataIndex="users"
-          key="users"
-          render={(users) => (
-            <Avatar.Group>
-              {users.map((user) => (
-                <Tooltip key={user._id} title={user.username} placement="top">
-                  <Avatar
-                    style={{ backgroundColor: user.avatar }}
-                    icon={<UserOutlined />}
-                  />
-                </Tooltip>
-              ))}
-            </Avatar.Group>
-          )}
-        />
-        <Column title="状态" dataIndex="status" key="status" />
-      </Table>
-    );
+    const listView = <List data={tasksOfList} status={status}></List>;
 
     return (
       <Card
-        title="周期1"
+        title="阶段"
         extra={
           <a onClick={this.toggleView}>
             {isBoardView ? (
-              <UnorderedListOutlined style={{ fontSize: "20px" }} />
+              <UnorderedListOutlined style={{ fontSize: '20px' }} />
             ) : (
-              <ProjectOutlined style={{ fontSize: "20px" }} />
+              <ProjectOutlined style={{ fontSize: '20px' }} />
             )}
           </a>
         }

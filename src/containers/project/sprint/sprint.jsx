@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import { Card, Table, Form, DatePicker, Modal } from 'antd';
+import { Card, Table, Form, DatePicker, Modal, Divider } from 'antd';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { ProjectOutlined, PlusCircleFilled } from '@ant-design/icons';
+import {
+  ProjectOutlined,
+  PlusCircleFilled,
+  FileAddOutlined,
+} from '@ant-design/icons';
 
+import TaskProgress from '../../../components/task-progress/task-progress';
 import { createSprint, getSprints } from '../../../redux/sprints/actions';
 
 import styles from './sprint.module.less';
@@ -66,7 +71,7 @@ class Sprint extends Component {
     return (
       <div>
         <Card
-          title="项目周期"
+          title="项目阶段"
           extra={
             <a onClick={this.showModal}>
               <PlusCircleFilled style={{ fontSize: '32px' }} />
@@ -76,7 +81,6 @@ class Sprint extends Component {
           <Table
             dataSource={sprints}
             pagination={false}
-            showHeader={false}
             rowKey="_id"
             rowClassName={(record) => {
               return moment().isBetween(
@@ -89,23 +93,42 @@ class Sprint extends Component {
                 : null;
             }}
           >
-            <Column title="开始时间" dataIndex="startDate" key="startDate" />
-            <Column title="结束时间" dataIndex="endDate" key="endDate" />
-            <Column title="完成情况" key="status" render={() => '8/15'} />
             <Column
-              title="查看任务"
-              key="tasks"
+              title="阶段时间"
+              key="date"
+              render={(value, record) =>
+                `${record.startDate}~${record.endDate}`
+              }
+            />
+            <Column
+              title="任务进度"
+              key="status"
               render={() => (
                 <Link to="/project/board">
-                  <ProjectOutlined />
+                  <TaskProgress todo={3} doing={5} done={4} />
                 </Link>
+              )}
+            />
+            <Column
+              title="操作"
+              key="tasks"
+              render={() => (
+                <>
+                  {/* <Link to="/project/board">
+                    <ProjectOutlined />
+                  </Link>
+                  <Divider type="vertical" /> */}
+                  <a>
+                    <FileAddOutlined />
+                  </a>
+                </>
               )}
             />
           </Table>
         </Card>
 
         <Modal
-          title="新增周期"
+          title="新增阶段"
           width={480}
           visible={this.state.visible}
           onOk={this.handleOk}
@@ -119,7 +142,7 @@ class Sprint extends Component {
               rules={[
                 {
                   required: true,
-                  message: '请选择周期时间！',
+                  message: '请选择阶段时间！',
                 },
               ]}
             >
