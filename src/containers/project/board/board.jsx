@@ -1,33 +1,29 @@
-import React, { Component } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
-import { Card, Table, Avatar, Tooltip, Tag } from 'antd';
-import {
-  UnorderedListOutlined,
-  ProjectOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import Column from '../../../components/board/column';
-import List from '../../../components/board/list';
-import { reqTaskList } from '../../../api/index';
+import React, { Component } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
+import { Card, Table, Avatar, Tooltip, Tag, Radio } from "antd";
+import { MenuOutlined, ProjectOutlined } from "@ant-design/icons";
+import Column from "../../../components/board/column";
+import List from "../../../components/board/list";
+import { reqTaskList } from "../../../api/index";
 
 const status = {
   todo: {
-    color: '#4a9ff9',
-    display: '未开始',
+    color: "#4a9ff9",
+    display: "未开始",
   },
   doing: {
-    color: '#f9944a',
-    display: '进行中',
+    color: "#f9944a",
+    display: "进行中",
   },
   done: {
-    color: '#2ac06d',
-    display: '已完成',
+    color: "#2ac06d",
+    display: "已完成",
   },
 };
 
 export default class Board extends Component {
   state = {
-    isBoardView: true,
+    value: "board",
     // originalTasks: [],
     tasks: {
       todo: [],
@@ -54,9 +50,10 @@ export default class Board extends Component {
     });
   }
 
-  toggleView = () => {
-    const isBoardView = !this.state.isBoardView;
-    this.setState({ isBoardView });
+  onChange = (e) => {
+    this.setState({
+      value: e.target.value,
+    });
   };
 
   /*方案1:如果需要将所有任务tasks作为store的一个属性，这里拖拽完后应该直接更新store.tasks的status，让页面自动重新渲染，但是会没有排序功能。
@@ -106,12 +103,12 @@ export default class Board extends Component {
   };
 
   render() {
-    const { tasks, isBoardView } = this.state;
+    const { tasks, value } = this.state;
     const tasksOfList = Object.values(tasks).flat();
 
     const boardView = (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: "flex" }}>
           {Object.keys(tasks).map((c, index) => (
             <Column title={status[c]} id={c} key={index} tasks={tasks[c]} />
           ))}
@@ -125,16 +122,22 @@ export default class Board extends Component {
       <Card
         title="阶段"
         extra={
-          <a onClick={this.toggleView}>
-            {isBoardView ? (
-              <UnorderedListOutlined style={{ fontSize: '20px' }} />
-            ) : (
-              <ProjectOutlined style={{ fontSize: '20px' }} />
-            )}
-          </a>
+          <Radio.Group
+            buttonStyle="solid"
+            onChange={this.onChange}
+            value={this.state.value}
+          >
+            <Radio.Button value="board">
+              <ProjectOutlined />
+            </Radio.Button>
+            <Radio.Button value="list">
+              {" "}
+              <MenuOutlined />
+            </Radio.Button>
+          </Radio.Group>
         }
       >
-        {isBoardView ? boardView : listView}
+        {value === "board" ? boardView : listView}
       </Card>
     );
   }

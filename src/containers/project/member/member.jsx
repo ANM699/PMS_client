@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Avatar,
   Card,
@@ -8,32 +8,32 @@ import {
   Popconfirm,
   Modal,
   Button,
-} from 'antd';
+} from "antd";
 import {
   UserOutlined,
   DeleteOutlined,
-  PlusCircleFilled,
-} from '@ant-design/icons';
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 
-import MemberForm from '../../../components/member/form';
-import { reqMemberList, reqUserList } from '../../../api/index';
+import MemberForm from "../../../components/member/form";
+import { reqMemberList, reqUserList } from "../../../api/index";
 
 const roleOptions = [
   {
-    color: '#f56a00',
-    name: '项目经理',
+    color: "#f56a00",
+    name: "项目经理",
   },
   {
-    color: '#7265e6',
-    name: '前端开发',
+    color: "#7265e6",
+    name: "前端开发",
   },
   {
-    color: '#00a2ae',
-    name: '后端开发',
+    color: "#00a2ae",
+    name: "后端开发",
   },
   {
-    color: '#ffbf00',
-    name: 'UI设计',
+    color: "#ffbf00",
+    name: "UI设计",
   },
 ];
 
@@ -45,8 +45,8 @@ export default class Member extends Component {
   };
   columns = [
     {
-      title: '成员',
-      dataIndex: 'username',
+      title: "成员",
+      dataIndex: "username",
       render: (text, record) => (
         <Space>
           <Avatar
@@ -61,13 +61,13 @@ export default class Member extends Component {
       ),
     },
     {
-      title: '邮箱',
-      dataIndex: 'email',
-      render: (text) => <div style={{ color: 'rgba(0,0,0,.45)' }}>{text}</div>,
+      title: "邮箱",
+      dataIndex: "email",
+      render: (text) => <div style={{ color: "rgba(0,0,0,.45)" }}>{text}</div>,
     },
     {
-      title: '角色',
-      dataIndex: 'roles',
+      title: "角色",
+      dataIndex: "roles",
       render: (roles) =>
         roles.map((role, index) => (
           <Tag key={index} color={role.color}>
@@ -76,9 +76,9 @@ export default class Member extends Component {
         )),
     },
     {
-      title: '操作',
-      dataIndex: '_id',
-      key: 'action',
+      title: "操作",
+      dataIndex: "_id",
+      key: "action",
       render: (_id) => (
         <Popconfirm
           placement="left"
@@ -128,7 +128,7 @@ export default class Member extends Component {
         this.form.resetFields();
       })
       .catch((info) => {
-        console.log('验证失败：', info);
+        console.log("验证失败：", info);
       });
   };
 
@@ -168,7 +168,7 @@ export default class Member extends Component {
           title="项目成员"
           extra={
             <a onClick={this.showModal}>
-              <PlusCircleFilled style={{ fontSize: '32px' }} />
+              <PlusCircleOutlined style={{ fontSize: "24px" }} />
             </a>
           }
         >
@@ -180,7 +180,7 @@ export default class Member extends Component {
             }}
             onClick={this.showModal}
           >
-            <PlusOutlined />
+            <PlusCircleOutlined  />
             添加成员
           </Button> */}
           <Table

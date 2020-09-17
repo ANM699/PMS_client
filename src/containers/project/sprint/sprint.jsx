@@ -1,18 +1,14 @@
-import React, { Component } from 'react';
-import { Card, Table, Form, DatePicker, Modal, Divider } from 'antd';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
-import {
-  ProjectOutlined,
-  PlusCircleFilled,
-  FileAddOutlined,
-} from '@ant-design/icons';
+import React, { Component } from "react";
+import { Card, Table, Form, DatePicker, Modal, Divider } from "antd";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import moment from "moment";
+import { PlusCircleOutlined, FileAddOutlined } from "@ant-design/icons";
 
-import TaskProgress from '../../../components/task-progress/task-progress';
-import { createSprint, getSprints } from '../../../redux/sprints/actions';
+import TaskProgress from "../../../components/task-progress/task-progress";
+import { createSprint, getSprints } from "../../../redux/sprints/actions";
 
-import styles from './sprint.module.less';
+import styles from "./sprint.module.less";
 
 const { RangePicker } = DatePicker;
 const { Column } = Table;
@@ -38,9 +34,9 @@ class Sprint extends Component {
     this.form
       .validateFields()
       .then((value) => {
-        const rangeDate = value['rangeDate'];
-        const startDate = rangeDate[0].format('YYYY-MM-DD');
-        const endDate = rangeDate[1].format('YYYY-MM-DD');
+        const rangeDate = value["rangeDate"];
+        const startDate = rangeDate[0].format("YYYY-MM-DD");
+        const endDate = rangeDate[1].format("YYYY-MM-DD");
         this.props.createSprint({ startDate, endDate });
         this.setState({
           visible: false,
@@ -48,7 +44,7 @@ class Sprint extends Component {
         this.form.resetFields();
       })
       .catch((info) => {
-        console.log('验证失败：', info);
+        console.log("验证失败：", info);
       });
   };
 
@@ -65,7 +61,7 @@ class Sprint extends Component {
 
     if (length > 0) {
       const lastEndDate = sprints[length - 1].endDate;
-      newStartDate = moment(lastEndDate).add(1, 'days').format('YYYY-MM-DD');
+      newStartDate = moment(lastEndDate).add(1, "days").format("YYYY-MM-DD");
     }
 
     return (
@@ -74,7 +70,7 @@ class Sprint extends Component {
           title="项目阶段"
           extra={
             <a onClick={this.showModal}>
-              <PlusCircleFilled style={{ fontSize: '32px' }} />
+              <PlusCircleOutlined style={{ fontSize: "24px" }} />
             </a>
           }
         >
@@ -87,7 +83,7 @@ class Sprint extends Component {
                 record.startDate,
                 record.endDate,
                 null,
-                '[]'
+                "[]"
               )
                 ? styles.curSprint
                 : null;
@@ -142,17 +138,17 @@ class Sprint extends Component {
               rules={[
                 {
                   required: true,
-                  message: '请选择阶段时间！',
+                  message: "请选择阶段时间！",
                 },
               ]}
             >
               <RangePicker
                 disabledDate={(currentDate) =>
-                  !currentDate.isBetween(newStartDate, endDate, 'day', '[]')
+                  !currentDate.isBetween(newStartDate, endDate, "day", "[]")
                 }
                 defaultPickerValue={[moment(newStartDate)]}
                 style={{
-                  width: '100%',
+                  width: "100%",
                 }}
               />
             </Form.Item>

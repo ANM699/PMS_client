@@ -1,28 +1,28 @@
-import React, { Component } from 'react';
-import { Card, Table, Form, DatePicker, Modal, Tag, Divider } from 'antd';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import { Card, Table, Form, DatePicker, Modal, Tag, Divider } from "antd";
+import { Link } from "react-router-dom";
 import {
   EditOutlined,
-  PlusCircleFilled,
+  PlusCircleOutlined,
   ForkOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import TaskProgress from '../../../components/task-progress/task-progress';
+import TaskProgress from "../../../components/task-progress/task-progress";
 
 const { Column } = Table;
 
 const priority = [
   {
-    color: '#2ac06d',
-    display: '低',
+    color: "#2ac06d",
+    display: "低",
   },
   {
-    color: '#f9944a',
-    display: '中',
+    color: "#f9944a",
+    display: "中",
   },
   {
-    color: '#ff4d4f',
-    display: '高',
+    color: "#ff4d4f",
+    display: "高",
   },
 ];
 
@@ -31,12 +31,12 @@ export default class Story extends Component {
     visible: false,
     stories: [
       {
-        _id: '1232312313',
-        role: '用户',
-        activity: '选择首页弹出的标签',
-        date: '2010-1-1',
+        _id: "1232312313",
+        role: "用户",
+        activity: "选择首页弹出的标签",
+        date: "2010-1-1",
         priority: 2,
-        businessValue: '分析用户画像，智能推荐分析用户画像，智能推荐',
+        businessValue: "分析用户画像，智能推荐分析用户画像，智能推荐",
         tasks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       },
     ],
@@ -60,7 +60,7 @@ export default class Story extends Component {
           title="项目需求"
           extra={
             <a onClick={this.showModal}>
-              <PlusCircleFilled style={{ fontSize: '32px' }} />
+              <PlusCircleOutlined style={{ fontSize: "24px" }} />
             </a>
           }
         >
@@ -78,7 +78,7 @@ export default class Story extends Component {
                 const p = priority[value];
                 return (
                   <Tag
-                    style={{ width: '40px', textAlign: 'center' }}
+                    style={{ width: "40px", textAlign: "center" }}
                     color={p.color}
                   >
                     {p.display}
@@ -86,7 +86,6 @@ export default class Story extends Component {
                 );
               }}
             />
-            <Column title="提出日期" dataIndex="date" key="date" />
             <Column title="角色" dataIndex="role" key="role" />
             <Column title="行为" dataIndex="activity" key="activity" />
             <Column
@@ -105,6 +104,7 @@ export default class Story extends Component {
                 </Link>
               )}
             />
+            <Column title="提出日期" dataIndex="date" key="date" />
             <Column
               title="操作"
               key="tasks"
