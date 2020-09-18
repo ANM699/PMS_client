@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, DatePicker } from 'antd';
+import moment from 'moment';
 
 const { RangePicker } = DatePicker;
 
 export default function ProjectForm(props) {
+  const [form] = Form.useForm();
+  const current = props.current;
+  const rangeDate = [moment(current.startDate), moment(current.endDate)];
+  useEffect(() => {
+    if (current) {
+      form.setFieldsValue({ ...current, rangeDate });
+    } else {
+      form.resetFields();
+    }
+  }, [props.current]);
+
   return (
     <Form
+      form={form}
       ref={props.formRef}
       labelCol={{
         span: 5,

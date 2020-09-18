@@ -33,7 +33,11 @@ export default function ProjectList(props) {
         dataIndex="_id"
         key="action"
         render={(_id) => (
-          <a key="edit">
+          <a
+            onClick={() => {
+              props.onItemEditClick(_id);
+            }}
+          >
             <EditOutlined />
           </a>
         )}

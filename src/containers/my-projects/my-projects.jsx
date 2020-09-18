@@ -1,45 +1,51 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import Cookies from "js-cookie";
-import { Card, Modal } from "antd";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Cookies from 'js-cookie';
+import { Card, Modal } from 'antd';
 import {
   PlusCircleOutlined,
   ExclamationCircleOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import ProjectList from "../../components/project/list";
-import ProjectForm from "../../components/project/form";
+import ProjectList from '../../components/project/list';
+import ProjectForm from '../../components/project/form';
 import {
   // createProject,
   // getProjectList,
   switchProject,
-} from "../../redux/project/actions";
-import { reqProjectList, reqCreateProject } from "../../api/index";
+} from '../../redux/project/actions';
+import { reqProjectList, reqCreateProject } from '../../api/index';
 
 class MyProjects extends Component {
   state = {
     visible: false,
     projectList: [],
+    current: null,
   };
 
-  showModal = () => {
+  showModal = (id) => {
+    let current = null;
+    if (id) {
+      current = this.state.projectList.find((project) => project._id === id);
+    }
     this.setState({
       visible: true,
+      current,
     });
   };
 
   handleConfirm = (item) => {
     let that = this;
     Modal.confirm({
-      title: "选择并切换至该项目？",
+      title: '选择并切换至该项目？',
       icon: <ExclamationCircleOutlined />,
-      cancelText: "取消",
-      okText: "确定",
+      cancelText: '取消',
+      okText: '确定',
       onOk() {
         that.props.switchProject(item);
         //todo:重置store.state中的sprints
-        Cookies.set("projectId", item._id);
-        that.props.history.push("/project/profile");
+        Cookies.set('projectId', item._id);
+        that.props.history.push('/project/profile');
       },
     });
   };
@@ -48,9 +54,9 @@ class MyProjects extends Component {
     this.form
       .validateFields()
       .then((value) => {
-        const rangeDate = value["rangeDate"];
-        value.startDate = rangeDate[0].format("YYYY-MM-DD");
-        value.endDate = rangeDate[1].format("YYYY-MM-DD");
+        const rangeDate = value['rangeDate'];
+        value.startDate = rangeDate[0].format('YYYY-MM-DD');
+        value.endDate = rangeDate[1].format('YYYY-MM-DD');
         // this.props.createProject(value);
         reqCreateProject(value).then((res) => {
           const result = res.data;
@@ -64,7 +70,7 @@ class MyProjects extends Component {
         });
       })
       .catch((info) => {
-        console.log("验证失败：", info);
+        console.log('验证失败：', info);
       });
   };
 
@@ -89,14 +95,14 @@ class MyProjects extends Component {
 
   render() {
     // const data = this.props.projectList;
-    const data = this.state.projectList;
+    const { projectList, current } = this.state;
     return (
       <div>
         <Card
           title="我的项目"
           extra={
             <a onClick={this.showModal}>
-              <PlusCircleOutlined style={{ fontSize: "20px" }} />
+              <PlusCircleOutlined style={{ fontSize: '24px' }} />
             </a>
           }
         >
@@ -111,7 +117,11 @@ class MyProjects extends Component {
             <PlusCircleOutlined  />
             创建项目
           </Button> */}
-          <ProjectList data={data} onConfirm={this.handleConfirm}></ProjectList>
+          <ProjectList
+            data={projectList}
+            onConfirm={this.handleConfirm}
+            onItemEditClick={this.showModal}
+          ></ProjectList>
         </Card>
 
         <Modal
@@ -123,7 +133,10 @@ class MyProjects extends Component {
           okText="确定"
           cancelText="取消"
         >
-          <ProjectForm formRef={(el) => (this.form = el)}></ProjectForm>
+          <ProjectForm
+            formRef={(el) => (this.form = el)}
+            current={current}
+          ></ProjectForm>
         </Modal>
       </div>
     );
