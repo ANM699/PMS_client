@@ -1,21 +1,12 @@
 import React, { Component } from "react";
-import {
-  Avatar,
-  Card,
-  Tag,
-  Space,
-  Table,
-  Popconfirm,
-  Modal,
-  Button,
-} from "antd";
+import { Avatar, Card, Tag, Space, Table, Popconfirm } from "antd";
 import {
   UserOutlined,
   DeleteOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
 
-import MemberForm from "../../../components/member/form";
+import MemberModal from "../../../components/member/modal";
 import { reqMemberList, reqUserList } from "../../../api/index";
 
 const roleOptions = [
@@ -53,10 +44,7 @@ export default class Member extends Component {
             style={{ backgroundColor: record.avatar }}
             icon={<UserOutlined />}
           ></Avatar>
-          {/* <div> */}
           <a>{text}</a>
-          {/* <div style={{ color: "rgba(0,0,0,.45)" }}>{record.email}</div> */}
-          {/* </div> */}
         </Space>
       ),
     },
@@ -106,33 +94,25 @@ export default class Member extends Component {
     });
   };
 
-  handleOk = (e) => {
-    this.form
-      .validateFields()
-      .then((value) => {
-        const user = this.state.users.find((user) => user._id === value._id);
-        const users = this.state.users.filter((user) => user._id !== value._id);
-        const roles = roleOptions.filter((role) => {
-          return value.roles.findIndex((value) => role.name === value) !== -1;
-        });
-        const newMember = {
-          ...user,
-          roles,
-        };
-        const members = [newMember, ...this.state.members];
-        this.setState({
-          members,
-          users,
-          visible: false,
-        });
-        this.form.resetFields();
-      })
-      .catch((info) => {
-        console.log("验证失败：", info);
-      });
+  handleOk = (values) => {
+    const user = this.state.users.find((user) => user._id === values._id);
+    const users = this.state.users.filter((user) => user._id !== values._id);
+    const roles = roleOptions.filter((role) => {
+      return values.roles.findIndex((value) => role.name === value) !== -1;
+    });
+    const newMember = {
+      ...user,
+      roles,
+    };
+    const members = [newMember, ...this.state.members];
+    this.setState({
+      members,
+      users,
+      visible: false,
+    });
   };
 
-  handleCancel = (e) => {
+  handleCancel = () => {
     this.setState({
       visible: false,
     });
@@ -172,17 +152,6 @@ export default class Member extends Component {
             </a>
           }
         >
-          {/* <Button
-            type="dashed"
-            style={{
-              width: '100%',
-              marginBottom: 8,
-            }}
-            onClick={this.showModal}
-          >
-            <PlusCircleOutlined  />
-            添加成员
-          </Button> */}
           <Table
             showHeader={false}
             pagination={false}
@@ -191,22 +160,14 @@ export default class Member extends Component {
             dataSource={this.state.members}
           />
         </Card>
-
-        <Modal
-          title="添加成员"
-          width={640}
+        <MemberModal
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          okText="确定"
-          cancelText="取消"
-        >
-          <MemberForm
-            formRef={(el) => (this.form = el)}
-            data={this.state.users}
-            roles={roleOptions}
-          ></MemberForm>
-        </Modal>
+          member={null}
+          users={this.state.users}
+          roles={roleOptions}
+        ></MemberModal>
       </div>
     );
   }

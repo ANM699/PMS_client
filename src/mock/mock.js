@@ -79,6 +79,15 @@ Mock.mock(`${api}/projects/create`, "post", function (options) {
   };
 });
 
+Mock.mock(RegExp(`${api}/projects/edit/` + ".*"), "post", function (options) {
+  return {
+    code: 0,
+    data: {
+      ...JSON.parse(options.body),
+    },
+  };
+});
+
 Mock.mock(`${api}/projects/project`, "get", function () {
   return {
     code: 0,

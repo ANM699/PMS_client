@@ -1,6 +1,6 @@
-import React from 'react';
-import { Table } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import React from "react";
+import { Table } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 const { Column } = Table;
 
@@ -17,7 +17,7 @@ export default function ProjectList(props) {
             <h4>
               <a onClick={() => props.onConfirm(record)}>{value}</a>
             </h4>
-            <div style={{ color: 'rgba(0,0,0,.45)', marginTop: '4px' }}>
+            <div style={{ color: "rgba(0,0,0,.45)", marginTop: "4px" }}>
               {record.description}
             </div>
           </>
@@ -32,10 +32,11 @@ export default function ProjectList(props) {
         title="操作"
         dataIndex="_id"
         key="action"
-        render={(_id) => (
+        render={(_id, record) => (
           <a
-            onClick={() => {
-              props.onItemEditClick(_id);
+            onClick={(e) => {
+              e.preventDefault();
+              props.onItemEditClick(record);
             }}
           >
             <EditOutlined />

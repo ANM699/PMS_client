@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import { Card, Table, Avatar, Tooltip, Tag, Radio } from "antd";
+import { Card, Radio } from "antd";
 import { MenuOutlined, ProjectOutlined } from "@ant-design/icons";
 import Column from "../../../components/board/column";
 import List from "../../../components/board/list";
