@@ -1,5 +1,6 @@
-import React from "react";
-import { Form, Select, Modal } from "antd";
+import React from 'react';
+import { Form, Select, Modal, Avatar, Space } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -15,7 +16,7 @@ export default function MemberModal({
   return (
     <Modal
       forceRender
-      title={member ? "编辑成员" : "添加成员"}
+      title={member ? '编辑成员' : '添加成员'}
       width={640}
       visible={visible}
       onOk={() => {
@@ -26,7 +27,7 @@ export default function MemberModal({
             form.resetFields();
           })
           .catch((info) => {
-            console.log("验证失败：", info);
+            console.log('验证失败：', info);
           });
       }}
       onCancel={onCancel}
@@ -48,24 +49,23 @@ export default function MemberModal({
           rules={[
             {
               required: true,
-              message: "请选择项目成员！",
+              message: '请选择项目成员！',
             },
           ]}
         >
-          <Select
-            showSearch
-            placeholder="选择成员"
-            optionFilterProp="children"
-            filterOption={(input, option) => {
-              console.log(option);
-              return (
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              );
-            }}
-          >
+          <Select showSearch placeholder="选择成员" optionFilterProp="title">
             {users.map((user, index) => (
-              <Option key={index} value={user._id}>
-                {user.username}
+              <Option key={index} value={user._id} title={user.username}>
+                <Space>
+                  <Avatar
+                    style={{ backgroundColor: user.avatar }}
+                    icon={<UserOutlined />}
+                  ></Avatar>
+                  <div>
+                    <a> {user.username}</a>
+                    <div style={{ color: 'rgba(0,0,0,.45)' }}>{user.email}</div>
+                  </div>
+                </Space>
               </Option>
             ))}
           </Select>
@@ -76,7 +76,7 @@ export default function MemberModal({
           rules={[
             {
               required: true,
-              message: "请选择成员角色！",
+              message: '请选择成员角色！',
             },
           ]}
         >

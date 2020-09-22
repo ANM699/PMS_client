@@ -1,30 +1,30 @@
-import React, { Component } from "react";
-import { Avatar, Card, Tag, Space, Table, Popconfirm } from "antd";
+import React, { Component } from 'react';
+import { Avatar, Card, Tag, Space, Table, Popconfirm } from 'antd';
 import {
   UserOutlined,
   DeleteOutlined,
   PlusCircleOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import MemberModal from "../../../components/member/modal";
-import { reqMemberList, reqUserList } from "../../../api/index";
+import MemberModal from '../../../components/member/modal';
+import { reqMemberList, reqUserList } from '../../../api/index';
 
 const roleOptions = [
   {
-    color: "#f56a00",
-    name: "项目经理",
+    color: '#f56a00',
+    name: '项目经理',
   },
   {
-    color: "#7265e6",
-    name: "前端开发",
+    color: '#7265e6',
+    name: '前端开发',
   },
   {
-    color: "#00a2ae",
-    name: "后端开发",
+    color: '#00a2ae',
+    name: '后端开发',
   },
   {
-    color: "#ffbf00",
-    name: "UI设计",
+    color: '#ffbf00',
+    name: 'UI设计',
   },
 ];
 
@@ -36,8 +36,8 @@ export default class Member extends Component {
   };
   columns = [
     {
-      title: "成员",
-      dataIndex: "username",
+      title: '成员',
+      dataIndex: 'username',
       render: (text, record) => (
         <Space>
           <Avatar
@@ -49,13 +49,15 @@ export default class Member extends Component {
       ),
     },
     {
-      title: "邮箱",
-      dataIndex: "email",
-      render: (text) => <div style={{ color: "rgba(0,0,0,.45)" }}>{text}</div>,
+      title: '邮箱',
+      dataIndex: 'email',
+      render: (text) => (
+        <span style={{ color: 'rgba(0,0,0,.45)' }}>{text}</span>
+      ),
     },
     {
-      title: "角色",
-      dataIndex: "roles",
+      title: '角色',
+      dataIndex: 'roles',
       render: (roles) =>
         roles.map((role, index) => (
           <Tag key={index} color={role.color}>
@@ -64,9 +66,9 @@ export default class Member extends Component {
         )),
     },
     {
-      title: "操作",
-      dataIndex: "_id",
-      key: "action",
+      title: '操作',
+      dataIndex: '_id',
+      key: 'action',
       render: (_id) => (
         <Popconfirm
           placement="left"
@@ -148,7 +150,7 @@ export default class Member extends Component {
           title="项目成员"
           extra={
             <a onClick={this.showModal}>
-              <PlusCircleOutlined style={{ fontSize: "24px" }} />
+              <PlusCircleOutlined style={{ fontSize: '24px' }} />
             </a>
           }
         >

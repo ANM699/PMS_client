@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { Form, Input, DatePicker, Modal } from "antd";
-import moment from "moment";
+import React, { useEffect } from 'react';
+import { Form, Input, DatePicker, Modal } from 'antd';
+import moment from 'moment';
 
 const { RangePicker } = DatePicker;
 
@@ -18,7 +18,7 @@ export default function ProjectModal({ visible, onOk, onCancel, project }) {
   return (
     <Modal
       forceRender
-      title={project ? "编辑项目" : "创建项目"}
+      title={project ? '编辑项目' : '创建项目'}
       width={640}
       visible={visible}
       onOk={() => {
@@ -26,10 +26,10 @@ export default function ProjectModal({ visible, onOk, onCancel, project }) {
           .validateFields()
           .then((values) => {
             onOk(values);
-            form.resetFields();
+            // form.resetFields();
           })
           .catch((info) => {
-            console.log("验证失败：", info);
+            console.log('验证失败：', info);
           });
       }}
       onCancel={onCancel}
@@ -51,7 +51,7 @@ export default function ProjectModal({ visible, onOk, onCancel, project }) {
           rules={[
             {
               required: true,
-              message: "请输入项目名称！",
+              message: '请输入项目名称！',
             },
           ]}
         >
@@ -63,13 +63,13 @@ export default function ProjectModal({ visible, onOk, onCancel, project }) {
           rules={[
             {
               required: true,
-              message: "请选择选择项目时间！",
+              message: '请选择选择项目时间！',
             },
           ]}
         >
           <RangePicker
             style={{
-              width: "100%",
+              width: '100%',
             }}
           />
         </Form.Item>
@@ -79,7 +79,7 @@ export default function ProjectModal({ visible, onOk, onCancel, project }) {
           rules={[
             {
               required: true,
-              message: "请输入至少五个字符的项目简介！",
+              message: '请输入至少五个字符的项目简介！',
               min: 5,
             },
           ]}

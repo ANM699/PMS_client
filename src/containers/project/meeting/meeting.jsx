@@ -12,17 +12,11 @@ export default class Meeting extends Component {
             张三，李四，王五
           </Descriptions.Item>
           <Descriptions.Item label="会议内容" span={2}>
-            Data disk type: MongoDB
-            <br />
-            Database version: 3.4
+            Data disk type: MongoDB Database version: 3.4
             <br />
             Package: dds.mongo.mid
             <br />
-            Storage space: 10 GB
-            <br />
-            Replication factor: 3
-            <br />
-            Region: East China 1
+            Storage space: 10 GB Replication factor: 3
           </Descriptions.Item>
           <Descriptions.Item label="待办事项">
             Data disk type: MongoDB
