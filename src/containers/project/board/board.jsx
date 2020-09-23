@@ -110,7 +110,7 @@ export default class Board extends Component {
       <DragDropContext onDragEnd={this.onDragEnd}>
         <div style={{ display: "flex" }}>
           {Object.keys(tasks).map((c, index) => (
-            <Column title={status[c]} id={c} key={index} tasks={tasks[c]} />
+            <Column status={status[c]} id={c} key={index} tasks={tasks[c]} />
           ))}
         </div>
       </DragDropContext>

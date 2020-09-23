@@ -90,7 +90,7 @@ class Sprint extends Component {
             }}
           >
             <Column
-              title="阶段时间"
+              title="阶段周期"
               key="date"
               render={(value, record) =>
                 `${record.startDate}~${record.endDate}`

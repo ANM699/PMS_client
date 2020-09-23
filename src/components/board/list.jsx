@@ -1,13 +1,13 @@
-import React from 'react';
-import { Table, Avatar, Tooltip, Tag } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import React from "react";
+import { Table, Avatar, Tooltip, Tag } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 const { Column } = Table;
 
 export default function List(props) {
   const { data, status } = props;
   return (
-    <Table dataSource={data} pagination={false} showHeader={false} rowKey="_id">
+    <Table dataSource={data} pagination={false} rowKey="_id">
       <Column
         width="90px"
         title="状态"
@@ -18,7 +18,7 @@ export default function List(props) {
           return <Tag color={p.color}>{p.display}</Tag>;
         }}
       />
-      <Column title="任务内容" dataIndex="content" key="content" />
+      <Column title="内容" dataIndex="content" key="content" />
       <Column
         title="参与者"
         dataIndex="users"
@@ -36,6 +36,9 @@ export default function List(props) {
           </Avatar.Group>
         )}
       />
+      <Column title="创建日期" dataIndex="createDate" />
+      <Column title="开始日期" dataIndex="startDate" />
+      <Column title="完成日期" dataIndex="endDate" />
     </Table>
   );
 }
