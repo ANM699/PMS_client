@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Draggable } from "react-beautiful-dnd";
-import { Card, Avatar, Tooltip } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import styles from "./task.module.less";
-import moment from "moment";
+import React, { Component } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
+import { Card, Avatar, Tooltip } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+import styles from './task.module.less';
+import moment from 'moment';
 
 // const getItemStyle = (isDragging, draggableStyle) => ({
 //   // change background colour if dragging
@@ -13,23 +13,26 @@ import moment from "moment";
 // });
 const displayDate = (task) => {
   switch (task.status) {
-    case "todo":
+    case 'todo':
       return (
-        <Tooltip title={task.createDate} placement="top">
-          {"创建于" + moment(task.createDate).fromNow()}
-        </Tooltip>
+        // <Tooltip title={task.createDate} placement="top">
+        //   {'创建于' + moment(task.createDate).fromNow()}
+        // </Tooltip>
+        '创建于' + moment(task.createDate).format('MM-DD')
       );
-    case "doing":
+    case 'doing':
       return (
-        <Tooltip title={task.startDate} placement="top">
-          {"开始于" + moment(task.startDate).fromNow()}
-        </Tooltip>
+        // <Tooltip title={task.startDate} placement="top">
+        //   {'开始于' + moment(task.startDate).fromNow()}
+        // </Tooltip>
+        '开始于' + moment(task.startDate).format('MM-DD')
       );
-    case "done":
+    case 'done':
       return (
-        <Tooltip title={task.endDate} placement="top">
-          {"完成于" + moment(task.endDate).fromNow()}
-        </Tooltip>
+        // <Tooltip title={task.endDate} placement="top">
+        //   {'完成于' + moment(task.endDate).fromNow()}
+        // </Tooltip>
+        '完成于' + moment(task.endDate).format('MM-DD')
       );
     default:
       break;
@@ -40,7 +43,11 @@ export default class Task extends Component {
   render() {
     const { task, index } = this.props;
     return (
-      <Draggable draggableId={task._id} index={index}>
+      <Draggable
+        draggableId={task._id}
+        index={index}
+        // isDragDisabled={task.status === 'done'}
+      >
         {(provided, snapshot) => (
           <div
             className={styles.container}

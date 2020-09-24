@@ -1,29 +1,31 @@
-import React, { Component } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
-import { Card, Radio } from "antd";
-import { MenuOutlined, ProjectOutlined } from "@ant-design/icons";
-import Column from "../../../components/board/column";
-import List from "../../../components/board/list";
-import { reqTaskList } from "../../../api/index";
+import React, { Component } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { Card, Radio } from 'antd';
+import { MenuOutlined, ProjectOutlined } from '@ant-design/icons';
+import moment from 'moment';
+
+import Column from '../../../components/board/column';
+import List from '../../../components/board/list';
+import { reqTaskList } from '../../../api/index';
 
 const status = {
   todo: {
-    color: "#4a9ff9",
-    display: "未开始",
+    color: '#4a9ff9',
+    display: '未开始',
   },
   doing: {
-    color: "#f9944a",
-    display: "进行中",
+    color: '#f9944a',
+    display: '进行中',
   },
   done: {
-    color: "#2ac06d",
-    display: "已完成",
+    color: '#2ac06d',
+    display: '已完成',
   },
 };
 
 export default class Board extends Component {
   state = {
-    value: "board",
+    value: 'board',
     // originalTasks: [],
     tasks: {
       todo: [],
@@ -88,6 +90,15 @@ export default class Board extends Component {
 
     //todo：更新draggedTask的状态：更新后端数据库，如果成功再更新state
     draggedTask.status = finish;
+    if (finish === 'todo') {
+      draggedTask.startDate = null;
+      draggedTask.endDate = null;
+    }
+    if (finish === 'doing') {
+      draggedTask.startDate = moment().format('YYYY-MM-DD');
+      draggedTask.endDate = null;
+    }
+    if (finish === 'done') draggedTask.endDate = moment().format('YYYY-MM-DD');
     // draggedTaskInOriginalTasks.status = finish;
 
     const { tasks } = this.state;
@@ -108,8 +119,8 @@ export default class Board extends Component {
 
     const boardView = (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <div style={{ display: "flex" }}>
-          {Object.keys(tasks).map((c, index) => (
+        <div style={{ display: 'flex' }}>
+          {Object.keys(status).map((c, index) => (
             <Column status={status[c]} id={c} key={index} tasks={tasks[c]} />
           ))}
         </div>
@@ -131,13 +142,13 @@ export default class Board extends Component {
               <ProjectOutlined />
             </Radio.Button>
             <Radio.Button value="list">
-              {" "}
+              {' '}
               <MenuOutlined />
             </Radio.Button>
           </Radio.Group>
         }
       >
-        {value === "board" ? boardView : listView}
+        {value === 'board' ? boardView : listView}
       </Card>
     );
   }
