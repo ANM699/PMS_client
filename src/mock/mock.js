@@ -103,11 +103,11 @@ Mock.mock(`${api}/projects/project`, "get", function () {
   };
 });
 
-Mock.mock(`${api}/tasks/list`, "get", function () {
+Mock.mock(RegExp(`${api}/tasks/list` + ".*"), "get", function () {
   return {
     code: 0,
     ...Mock.mock({
-      "data|10-20": [
+      "data|10-15": [
         {
           _id: "@id",
           content: "@csentence",
