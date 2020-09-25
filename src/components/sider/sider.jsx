@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import {
   TeamOutlined,
   ProjectOutlined,
-  AreaChartOutlined,
+  UserOutlined,
   CarryOutOutlined,
   SolutionOutlined,
   ProfileOutlined,
@@ -51,11 +51,11 @@ class Sider extends Component {
       title: '会议纪要',
       icon: <SnippetsOutlined />,
     },
-    // {
-    //   path: '',
-    //   title: '燃尽图',
-    //   icon: <AreaChartOutlined />,
-    // },
+    {
+      path: '/account',
+      title: '个人中心',
+      icon: <UserOutlined />,
+    },
   ];
 
   render() {
