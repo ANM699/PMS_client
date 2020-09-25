@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { Card, Radio } from 'antd';
+import { Card, Radio, Empty } from 'antd';
 import { MenuOutlined, ProjectOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -26,6 +26,7 @@ const status = {
 export default class Board extends Component {
   state = {
     value: 'board',
+    title: '',
     // originalTasks: [],
     tasks: {
       todo: [],
@@ -35,7 +36,17 @@ export default class Board extends Component {
   };
 
   componentDidMount() {
-    reqTaskList().then((res) => {
+    const params = this.props.match.params;
+    //从菜单直接点进来，没有type和id
+    const type = params.type || 'sprint';
+    const id = params.id || '530000197311083057'; //todo:没有参数时，跳转到当前阶段的任务看板,这里id替换成当前阶段id
+
+    const title = (type === 'sprint' ? '阶段' : '需求') + id;
+    this.setState({
+      title,
+    });
+
+    reqTaskList({ type, id }).then((res) => {
       const result = res.data;
       if (result.code === 0) {
         const originalTasks = result.data;
@@ -114,24 +125,26 @@ export default class Board extends Component {
   };
 
   render() {
-    const { tasks, value } = this.state;
+    const { tasks, value, title } = this.state;
     const tasksOfList = Object.values(tasks).flat();
 
-    const boardView = (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <div style={{ display: 'flex' }}>
-          {Object.keys(status).map((c, index) => (
-            <Column status={status[c]} id={c} key={index} tasks={tasks[c]} />
-          ))}
-        </div>
-      </DragDropContext>
-    );
-
+    const boardView =
+      tasksOfList.length === 0 ? (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      ) : (
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <div style={{ display: 'flex' }}>
+            {Object.keys(status).map((c, index) => (
+              <Column status={status[c]} id={c} key={index} tasks={tasks[c]} />
+            ))}
+          </div>
+        </DragDropContext>
+      );
     const listView = <List data={tasksOfList} status={status}></List>;
 
     return (
       <Card
-        title="阶段"
+        title={title}
         extra={
           <Radio.Group
             buttonStyle="solid"
@@ -142,7 +155,6 @@ export default class Board extends Component {
               <ProjectOutlined />
             </Radio.Button>
             <Radio.Button value="list">
-              {' '}
               <MenuOutlined />
             </Radio.Button>
           </Radio.Group>

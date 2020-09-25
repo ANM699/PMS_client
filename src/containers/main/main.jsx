@@ -50,6 +50,11 @@ class Main extends Component {
     {
       path: '/project/board',
       component: Board,
+      exact: true,
+    },
+    {
+      path: '/project/board/:type/:id',
+      component: Board,
     },
     {
       path: '/project/sprint',
