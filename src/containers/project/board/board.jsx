@@ -5,23 +5,9 @@ import { MenuOutlined, ProjectOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
 import Column from '../../../components/board/column';
-import List from '../../../components/board/list';
+import TaskList from '../../../components/board/list';
 import { reqTaskList } from '../../../api/index';
-
-const status = {
-  todo: {
-    color: '#4a9ff9',
-    display: '未开始',
-  },
-  doing: {
-    color: '#f9944a',
-    display: '进行中',
-  },
-  done: {
-    color: '#2ac06d',
-    display: '已完成',
-  },
-};
+import { sortTasks, status } from '../../../utils/index';
 
 export default class Board extends Component {
   state = {
@@ -50,10 +36,7 @@ export default class Board extends Component {
       const result = res.data;
       if (result.code === 0) {
         const originalTasks = result.data;
-        const tasks = this.state.tasks;
-        originalTasks.forEach((task) => {
-          tasks[task.status].push(task);
-        });
+        const tasks = sortTasks(originalTasks);
         // console.log(tasks);
         this.setState({
           tasks,
@@ -140,7 +123,7 @@ export default class Board extends Component {
           </div>
         </DragDropContext>
       );
-    const listView = <List data={tasksOfList} status={status}></List>;
+    const listView = <TaskList data={tasksOfList} status={status}></TaskList>;
 
     return (
       <Card

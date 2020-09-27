@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { Card, Avatar, Tooltip } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import styles from './task.module.less';
+import styles from './item.module.less';
 import moment from 'moment';
 
 // const getItemStyle = (isDragging, draggableStyle) => ({
@@ -39,7 +39,7 @@ const displayDate = (task) => {
   }
 };
 
-export default class Task extends Component {
+export default class Item extends Component {
   render() {
     const { task, index } = this.props;
     return (

@@ -66,11 +66,26 @@ export const reqMemberList = () => {
   return ajax('/projects/members');
 };
 
-//根据projectId获取冲刺周期列表list
+//根据projectId获取冲刺周期列表
 export const reqSprintList = () => {
   return ajax('/sprints/list');
 };
 //新增冲刺周期
 export const reqCreateSprint = ({ startDate, endDate }) => {
   return ajax('/sprints/create', { startDate, endDate }, 'POST');
+};
+
+//根据projectId获取用户故事列表
+export const reqStoryList = () => {
+  return ajax('/stories/list');
+};
+
+//新增任务
+export const reqCreateTask = ({
+  content,
+  createDate,
+  status = 'todo',
+  users = [],
+}) => {
+  return ajax('/tasks/create', { content, createDate, status, users }, 'POST');
 };

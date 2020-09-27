@@ -28,7 +28,6 @@ class MyProjects extends Component {
   };
 
   showModal = (current) => {
-    console.log(current);
     this.setState({
       visible: true,
       current,

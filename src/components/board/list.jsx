@@ -1,13 +1,13 @@
-import React from "react";
-import { Table, Avatar, Tooltip, Tag } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import React from 'react';
+import { Table, Avatar, Tooltip, Tag } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
 
 export default function List(props) {
-  const { data, status } = props;
+  const { data, status, size = 'default' } = props;
   return (
-    <Table dataSource={data} pagination={false} rowKey="_id">
+    <Table dataSource={data} pagination={false} rowKey="_id" size={size}>
       <Column
         width="90px"
         title="状态"

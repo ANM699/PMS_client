@@ -7,6 +7,7 @@ import { PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons';
 
 import TaskProgress from '../../../components/task-progress/task-progress';
 import { createSprint, getSprints } from '../../../redux/sprints/actions';
+import { sortTasks } from '../../../utils/index';
 
 import styles from './sprint.module.less';
 
@@ -99,11 +100,19 @@ class Sprint extends Component {
             <Column
               title="任务进度"
               dataIndex="_id"
-              render={(id) => (
-                <Link to={`/project/board/sprint/${id}`}>
-                  <TaskProgress todo={3} doing={5} done={4} />
-                </Link>
-              )}
+              render={(id, record) => {
+                const sortedTasks = sortTasks(record.tasks);
+
+                return (
+                  <Link to={`/project/board/sprint/${id}`}>
+                    <TaskProgress
+                      todo={sortedTasks.todo.length}
+                      doing={sortedTasks.doing.length}
+                      done={sortedTasks.done.length}
+                    />
+                  </Link>
+                );
+              }}
             />
             <Column
               title="操作"

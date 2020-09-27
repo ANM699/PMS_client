@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import Task from './task';
+import Item from './item';
 
 import styles from './column.module.less';
 
@@ -28,7 +28,7 @@ export default class Column extends Component {
               // style={getListStyle(snapshot.isDraggingOver)}
             >
               {tasks.map((task, index) => (
-                <Task key={task._id} task={task} index={index} />
+                <Item key={task._id} task={task} index={index} />
               ))}
               {provided.placeholder}
             </div>

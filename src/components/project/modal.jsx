@@ -63,7 +63,7 @@ export default function ProjectModal({ visible, onOk, onCancel, project }) {
           rules={[
             {
               required: true,
-              message: '请选择选择项目时间！',
+              message: '请选择项目时间！',
             },
           ]}
         >

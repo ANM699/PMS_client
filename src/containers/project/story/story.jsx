@@ -8,6 +8,11 @@ import {
 } from '@ant-design/icons';
 
 import TaskProgress from '../../../components/task-progress/task-progress';
+import TaskModal from '../../../components/task/modal';
+import TaskList from '../../../components/board/list';
+import { reqCreateTask, reqStoryList } from '../../../api/index';
+
+import { sortTasks, status } from '../../../utils/index';
 
 const { Column } = Table;
 
@@ -28,46 +33,94 @@ const priority = [
 
 export default class Story extends Component {
   state = {
-    visible: false,
-    stories: [
-      {
-        _id: '1232312313',
-        role: '用户',
-        activity: '选择首页弹出的标签',
-        date: '2010-1-1',
-        priority: 2,
-        businessValue: '分析用户画像，智能推荐分析用户画像，智能推荐',
-        tasks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      },
-    ],
+    storyModalVisible: false,
+    taskModalVisible: false,
+    current: null,
+    storyList: [],
   };
-  showModal = () => {
+  showStoryModal = () => {
     this.setState({
-      visible: true,
+      storyModalVisible: true,
     });
   };
 
-  handleCancel = (e) => {
+  showTaskModal = (current) => {
     this.setState({
-      visible: false,
+      taskModalVisible: true,
+      current,
     });
   };
+
+  handleStoryCancel = (e) => {
+    this.setState({
+      storyModalVisible: false,
+    });
+  };
+
+  handleTaskCancel = (e) => {
+    this.setState({
+      taskModalVisible: false,
+    });
+  };
+
+  handleTaskOk = (values) => {
+    values.createDate = values.createDate.format('YYYY-MM-DD');
+    reqCreateTask(values).then((res) => {
+      const result = res.data;
+      if (result.code === 0) {
+        const storyList = this.state.storyList.map((story) => {
+          if (story._id === this.state.current._id) {
+            story.tasks.todo.push(result.data);
+          }
+          return story;
+        });
+        this.setState({
+          storyList,
+          taskModalVisible: false,
+        });
+      }
+    });
+  };
+
+  componentDidMount() {
+    reqStoryList().then((res) => {
+      const result = res.data;
+      if (result.code === 0) {
+        result.data.forEach((story) => {
+          const tasks = story.tasks;
+          story.tasks = sortTasks(tasks);
+        });
+        this.setState({
+          storyList: result.data,
+        });
+      }
+    });
+  }
 
   render() {
+    const { taskModalVisible, storyModalVisible, storyList } = this.state;
     return (
       <div>
         <Card
           title="项目需求"
           extra={
-            <a onClick={this.showModal}>
+            <a onClick={this.showStoryModal}>
               <PlusCircleOutlined style={{ fontSize: '24px' }} />
             </a>
           }
         >
           <Table
-            dataSource={this.state.stories}
+            dataSource={storyList}
             pagination={false}
             rowKey="_id"
+            expandable={{
+              expandedRowRender: (record) => {
+                const data = Object.values(record.tasks).flat();
+                return (
+                  <TaskList data={data} status={status} size="small"></TaskList>
+                );
+              },
+            }}
           >
             <Column
               width="80px"
@@ -98,23 +151,29 @@ export default class Story extends Component {
             <Column
               title="任务进度"
               dataIndex="_id"
-              render={(id) => (
-                <Link to={`/project/board/story/${id}`}>
-                  <TaskProgress todo={3} doing={4} done={3} />
-                </Link>
-              )}
+              render={(id, record) => {
+                return (
+                  <Link to={`/project/board/story/${id}`}>
+                    <TaskProgress
+                      todo={record.tasks.todo.length}
+                      doing={record.tasks.doing.length}
+                      done={record.tasks.done.length}
+                    />
+                  </Link>
+                );
+              }}
             />
             <Column title="提出日期" dataIndex="date" key="date" />
             <Column
               title="操作"
-              key="tasks"
-              render={() => (
+              key="_id"
+              render={(id, record) => (
                 <>
-                  <a>
+                  <a onClick={() => this.showStoryModal(record)}>
                     <EditOutlined />
                   </a>
                   <Divider type="vertical" />
-                  <a>
+                  <a onClick={() => this.showTaskModal(record)}>
                     <ForkOutlined />
                   </a>
                 </>
@@ -123,12 +182,17 @@ export default class Story extends Component {
           </Table>
         </Card>
 
+        <TaskModal
+          visible={taskModalVisible}
+          onOk={this.handleTaskOk}
+          onCancel={this.handleTaskCancel}
+        ></TaskModal>
         <Modal
           title="新增需求"
           width={480}
-          visible={this.state.visible}
+          visible={storyModalVisible}
           onOk={this.handleOk}
-          onCancel={this.handleCancel}
+          onCancel={this.handleStoryCancel}
           okText="确定"
           cancelText="取消"
         ></Modal>
