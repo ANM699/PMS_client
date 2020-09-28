@@ -57,8 +57,8 @@ export const reqProjectList = () => {
 };
 
 //根据projectId获取阶段下或者用户故事下的任务列表
-export const reqTaskList = ({ type, id }) => {
-  return ajax('/tasks/list', { type, id });
+export const reqTaskList = (params) => {
+  return ajax('/tasks/list', params);
 };
 
 //根据projectId获取成员列表
@@ -80,6 +80,11 @@ export const reqStoryList = () => {
   return ajax('/stories/list');
 };
 
+//根据projectId获取任务列表
+// export const reqTaskList = () => {
+//   return ajax('/tasks/list');
+// };
+
 //新增任务
 export const reqCreateTask = ({
   content,
@@ -88,4 +93,35 @@ export const reqCreateTask = ({
   users = [],
 }) => {
   return ajax('/tasks/create', { content, createDate, status, users }, 'POST');
+};
+
+//新增用户故事
+export const reqCreateStory = ({
+  role,
+  activity,
+  priority,
+  businessValue,
+  date,
+}) => {
+  return ajax(
+    '/storys/create',
+    { role, activity, priority, businessValue, date },
+    'POST'
+  );
+};
+
+//编辑用户故事
+export const reqEditStory = ({
+  _id,
+  role,
+  activity,
+  priority,
+  businessValue,
+  date,
+}) => {
+  return ajax(
+    `/storys/edit/${_id}`,
+    { _id, role, activity, priority, businessValue, date },
+    'POST'
+  );
 };

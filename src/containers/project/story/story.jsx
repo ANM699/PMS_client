@@ -9,8 +9,14 @@ import {
 
 import TaskProgress from '../../../components/task-progress/task-progress';
 import TaskModal from '../../../components/task/modal';
+import StoryModal from '../../../components/story/modal';
 import TaskList from '../../../components/board/list';
-import { reqCreateTask, reqStoryList } from '../../../api/index';
+import {
+  reqCreateTask,
+  reqCreateStory,
+  reqStoryList,
+  reqEditStory,
+} from '../../../api/index';
 
 import { sortTasks, status } from '../../../utils/index';
 
@@ -38,9 +44,10 @@ export default class Story extends Component {
     current: null,
     storyList: [],
   };
-  showStoryModal = () => {
+  showStoryModal = (current) => {
     this.setState({
       storyModalVisible: true,
+      current,
     });
   };
 
@@ -82,6 +89,38 @@ export default class Story extends Component {
     });
   };
 
+  handleStoryOk = (values) => {
+    const current = this.state.current;
+    const _id = current ? current._id : '';
+    values.date = values.date.format('YYYY-MM-DD');
+
+    if (_id) {
+      //编辑
+      reqEditStory({ ...values, _id }).then((res) => {
+        const result = res.data;
+        if (result.code === 0) {
+          const storyList = this.state.storyList.map((story) =>
+            story._id === _id ? { ...story, ...result.data } : story
+          );
+          this.setState({
+            storyList,
+            storyModalVisible: false,
+          });
+        }
+      });
+    } else {
+      reqCreateStory(values).then((res) => {
+        const result = res.data;
+        if (result.code === 0) {
+          this.setState({
+            storyList: [result.data, ...this.state.storyList],
+            storyModalVisible: false,
+          });
+        }
+      });
+    }
+  };
+
   componentDidMount() {
     reqStoryList().then((res) => {
       const result = res.data;
@@ -98,13 +137,23 @@ export default class Story extends Component {
   }
 
   render() {
-    const { taskModalVisible, storyModalVisible, storyList } = this.state;
+    const {
+      taskModalVisible,
+      storyModalVisible,
+      storyList,
+      current,
+    } = this.state;
     return (
       <div>
         <Card
           title="项目需求"
           extra={
-            <a onClick={this.showStoryModal}>
+            <a
+              onClick={(e) => {
+                e.preventDefault();
+                this.showStoryModal();
+              }}
+            >
               <PlusCircleOutlined style={{ fontSize: '24px' }} />
             </a>
           }
@@ -120,6 +169,8 @@ export default class Story extends Component {
                   <TaskList data={data} status={status} size="small"></TaskList>
                 );
               },
+              rowExpandable: (record) =>
+                Object.values(record.tasks).flat().length > 0,
             }}
           >
             <Column
@@ -187,15 +238,12 @@ export default class Story extends Component {
           onOk={this.handleTaskOk}
           onCancel={this.handleTaskCancel}
         ></TaskModal>
-        <Modal
-          title="新增需求"
-          width={480}
+        <StoryModal
           visible={storyModalVisible}
-          onOk={this.handleOk}
+          onOk={this.handleStoryOk}
           onCancel={this.handleStoryCancel}
-          okText="确定"
-          cancelText="取消"
-        ></Modal>
+          story={current}
+        ></StoryModal>
       </div>
     );
   }

@@ -103,7 +103,7 @@ Mock.mock(`${api}/projects/project`, 'get', function () {
   };
 });
 
-Mock.mock(RegExp(`${api}/tasks/list` + '.*'), 'get', function () {
+Mock.mock(RegExp(`${api}/tasks/list` + '.*'), 'get', function (options) {
   return {
     code: 0,
     ...Mock.mock({
@@ -303,6 +303,32 @@ Mock.mock(`${api}/tasks/create`, 'post', function (options) {
     data: {
       ...JSON.parse(options.body),
       _id: Mock.mock('@id'),
+      projectId: Cookies.get('projectId'),
+    },
+  };
+});
+
+Mock.mock(`${api}/storys/create`, 'post', function (options) {
+  return {
+    code: 0,
+    data: {
+      ...JSON.parse(options.body),
+      _id: Mock.mock('@id'),
+      tasks: {
+        todo: [],
+        doing: [],
+        done: [],
+      },
+      projectId: Cookies.get('projectId'),
+    },
+  };
+});
+
+Mock.mock(RegExp(`${api}/storys/edit/` + '.*'), 'post', function (options) {
+  return {
+    code: 0,
+    data: {
+      ...JSON.parse(options.body),
     },
   };
 });

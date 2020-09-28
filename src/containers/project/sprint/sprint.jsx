@@ -3,20 +3,41 @@ import { Card, Table, Form, DatePicker, Modal, Divider } from 'antd';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, AppstoreAddOutlined } from '@ant-design/icons';
 
 import TaskProgress from '../../../components/task-progress/task-progress';
+import TaskTransfer from '../../../components/task/transfer';
 import { createSprint, getSprints } from '../../../redux/sprints/actions';
 import { sortTasks } from '../../../utils/index';
+
+import { reqTaskList } from '../../../api/index';
 
 import styles from './sprint.module.less';
 
 const { RangePicker } = DatePicker;
 const { Column } = Table;
 
+const columns = [
+  {
+    dataIndex: 'content',
+    title: '任务',
+  },
+  {
+    dataIndex: 'createDate',
+    title: '创建时间',
+  },
+];
+
 class Sprint extends Component {
   state = {
     visible: false,
+    transferVisible: false,
+    targetKeys: [],
+    tasks: [],
+  };
+
+  onChange = (nextTargetKeys) => {
+    this.setState({ targetKeys: nextTargetKeys });
   };
 
   showModal = () => {
@@ -25,9 +46,22 @@ class Sprint extends Component {
     });
   };
 
+  showTransferModal = () => {
+    this.setState({
+      transferVisible: true,
+      targetKeys: [],
+    });
+  };
+
   handleCancel = (e) => {
     this.setState({
       visible: false,
+    });
+  };
+
+  handleTransferCancel = (e) => {
+    this.setState({
+      transferVisible: false,
     });
   };
 
@@ -49,12 +83,37 @@ class Sprint extends Component {
       });
   };
 
+  handleTransferOk = () => {
+    const { targetKeys } = this.state;
+    if (targetKeys.length) {
+      const tasks = this.state.tasks.filter(
+        (task) => !targetKeys.includes(task._id)
+      );
+
+      //todo:设置task的sprintId
+      this.setState({ tasks, transferVisible: false });
+    } else {
+      this.setState({ transferVisible: false });
+    }
+  };
+
   componentDidMount() {
     this.props.getSprints();
+    reqTaskList().then((res) => {
+      const result = res.data;
+      const tasks = result.data.filter((task) => task.status === 'todo');
+      if (result.code === 0) {
+        this.setState({
+          tasks,
+        });
+      }
+    });
   }
 
   render() {
     const { startDate, endDate } = this.props.project;
+
+    const { targetKeys, tasks, transferVisible } = this.state;
     const sprints = this.props.sprints;
     const length = sprints.length;
 
@@ -123,8 +182,8 @@ class Sprint extends Component {
                     <ProjectOutlined />
                   </Link>
                   <Divider type="vertical" /> */}
-                  <a>
-                    <FileAddOutlined />
+                  <a onClick={this.showTransferModal}>
+                    <AppstoreAddOutlined />
                   </a>
                 </>
               )}
@@ -163,6 +222,16 @@ class Sprint extends Component {
             </Form.Item>
           </Form>
         </Modal>
+
+        <TaskTransfer
+          onCancel={this.handleTransferCancel}
+          visible={transferVisible}
+          dataSource={tasks}
+          targetKeys={targetKeys}
+          onOk={this.handleTransferOk}
+          onChange={this.onChange}
+          columns={columns}
+        ></TaskTransfer>
       </div>
     );
   }

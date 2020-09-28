@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Modal, Form, Input, DatePicker } from 'antd';
 import moment from 'moment';
 
-export default function taskModal({ visible, onOk, onCancel }) {
+export default function TaskModal({ visible, onOk, onCancel }) {
   const [form] = Form.useForm();
   //   useEffect(() => {
   //     form.resetFields();
