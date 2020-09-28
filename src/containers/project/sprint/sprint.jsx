@@ -10,7 +10,7 @@ import TaskTransfer from '../../../components/task/transfer';
 import { createSprint, getSprints } from '../../../redux/sprints/actions';
 import { sortTasks } from '../../../utils/index';
 
-import { reqTaskList } from '../../../api/index';
+import { reqTaskList, reqSprintList } from '../../../api/index';
 
 import styles from './sprint.module.less';
 
@@ -33,7 +33,9 @@ class Sprint extends Component {
     visible: false,
     transferVisible: false,
     targetKeys: [],
+    sprints: [],
     tasks: [],
+    currentId: null,
   };
 
   onChange = (nextTargetKeys) => {
@@ -46,10 +48,11 @@ class Sprint extends Component {
     });
   };
 
-  showTransferModal = () => {
+  showTransferModal = (id) => {
     this.setState({
       transferVisible: true,
       targetKeys: [],
+      currentId: id,
     });
   };
 
@@ -84,14 +87,22 @@ class Sprint extends Component {
   };
 
   handleTransferOk = () => {
-    const { targetKeys } = this.state;
+    const { targetKeys, currentId } = this.state;
     if (targetKeys.length) {
-      const tasks = this.state.tasks.filter(
-        (task) => !targetKeys.includes(task._id)
+      const filterTasks = [];
+      const tasks = [];
+      this.state.tasks.forEach((task) => {
+        targetKeys.includes(task._id)
+          ? filterTasks.push(task)
+          : tasks.push(task);
+      });
+      const sprints = this.state.sprints.map((sprint) =>
+        sprint._id === currentId
+          ? { ...sprint, tasks: sprint.tasks.concat(filterTasks) }
+          : sprint
       );
-
       //todo:设置task的sprintId
-      this.setState({ tasks, transferVisible: false });
+      this.setState({ sprints, tasks, transferVisible: false });
     } else {
       this.setState({ transferVisible: false });
     }
@@ -99,6 +110,14 @@ class Sprint extends Component {
 
   componentDidMount() {
     this.props.getSprints();
+    reqSprintList().then((res) => {
+      const result = res.data;
+      if (result.code === 0) {
+        this.setState({
+          sprints: result.data,
+        });
+      }
+    });
     reqTaskList().then((res) => {
       const result = res.data;
       const tasks = result.data.filter((task) => task.status === 'todo');
@@ -113,8 +132,8 @@ class Sprint extends Component {
   render() {
     const { startDate, endDate } = this.props.project;
 
-    const { targetKeys, tasks, transferVisible } = this.state;
-    const sprints = this.props.sprints;
+    const { targetKeys, tasks, transferVisible, sprints } = this.state;
+    // const sprints = this.props.sprints;
     const length = sprints.length;
 
     let newStartDate = startDate;
@@ -175,14 +194,18 @@ class Sprint extends Component {
             />
             <Column
               title="操作"
-              key="tasks"
-              render={() => (
+              dataIndex="_id"
+              render={(id) => (
                 <>
                   {/* <Link to="/project/board">
                     <ProjectOutlined />
                   </Link>
                   <Divider type="vertical" /> */}
-                  <a onClick={this.showTransferModal}>
+                  <a
+                    onClick={() => {
+                      this.showTransferModal(id);
+                    }}
+                  >
                     <AppstoreAddOutlined />
                   </a>
                 </>
