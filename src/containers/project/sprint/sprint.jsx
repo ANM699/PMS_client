@@ -7,10 +7,15 @@ import { PlusCircleOutlined, AppstoreAddOutlined } from '@ant-design/icons';
 
 import TaskProgress from '../../../components/task-progress/task-progress';
 import TaskTransfer from '../../../components/task/transfer';
+import TaskList from '../../../components/board/list';
 import { createSprint, getSprints } from '../../../redux/sprints/actions';
-import { sortTasks } from '../../../utils/index';
+import { sortTasks, status } from '../../../utils/index';
 
-import { reqTaskList, reqSprintList } from '../../../api/index';
+import {
+  reqTaskList,
+  reqSprintList,
+  reqCreateSprint,
+} from '../../../api/index';
 
 import styles from './sprint.module.less';
 
@@ -33,7 +38,7 @@ class Sprint extends Component {
     visible: false,
     transferVisible: false,
     targetKeys: [],
-    sprints: [],
+    sprintList: [],
     tasks: [],
     currentId: null,
   };
@@ -75,11 +80,18 @@ class Sprint extends Component {
         const rangeDate = value['rangeDate'];
         const startDate = rangeDate[0].format('YYYY-MM-DD');
         const endDate = rangeDate[1].format('YYYY-MM-DD');
-        this.props.createSprint({ startDate, endDate });
-        this.setState({
-          visible: false,
-        });
-        this.form.resetFields();
+        return reqCreateSprint({ startDate, endDate });
+      })
+      .then((res) => {
+        const result = res.data;
+        if (result.code === 0) {
+          const sprintList = [...this.state.sprintList, result.data];
+          this.setState({
+            visible: false,
+            sprintList,
+          });
+          this.form.resetFields();
+        }
       })
       .catch((info) => {
         console.log('验证失败：', info);
@@ -96,13 +108,19 @@ class Sprint extends Component {
           ? filterTasks.push(task)
           : tasks.push(task);
       });
-      const sprints = this.state.sprints.map((sprint) =>
+      const sprintList = this.state.sprintList.map((sprint) =>
         sprint._id === currentId
-          ? { ...sprint, tasks: sprint.tasks.concat(filterTasks) }
+          ? {
+              ...sprint,
+              tasks: {
+                ...sprint.tasks,
+                todo: sprint.tasks.todo.concat(filterTasks),
+              },
+            }
           : sprint
       );
       //todo:设置task的sprintId
-      this.setState({ sprints, tasks, transferVisible: false });
+      this.setState({ sprintList, tasks, transferVisible: false });
     } else {
       this.setState({ transferVisible: false });
     }
@@ -113,8 +131,12 @@ class Sprint extends Component {
     reqSprintList().then((res) => {
       const result = res.data;
       if (result.code === 0) {
+        result.data.forEach((sprint) => {
+          const tasks = sprint.tasks;
+          sprint.tasks = sortTasks(tasks);
+        });
         this.setState({
-          sprints: result.data,
+          sprintList: result.data,
         });
       }
     });
@@ -132,14 +154,14 @@ class Sprint extends Component {
   render() {
     const { startDate, endDate } = this.props.project;
 
-    const { targetKeys, tasks, transferVisible, sprints } = this.state;
+    const { targetKeys, tasks, transferVisible, sprintList } = this.state;
     // const sprints = this.props.sprints;
-    const length = sprints.length;
+    const length = sprintList.length;
 
     let newStartDate = startDate;
 
     if (length > 0) {
-      const lastEndDate = sprints[length - 1].endDate;
+      const lastEndDate = sprintList[length - 1].endDate;
       newStartDate = moment(lastEndDate).add(1, 'days').format('YYYY-MM-DD');
     }
 
@@ -154,7 +176,7 @@ class Sprint extends Component {
           }
         >
           <Table
-            dataSource={sprints}
+            dataSource={sprintList}
             pagination={false}
             rowKey="_id"
             rowClassName={(record) => {
@@ -166,6 +188,16 @@ class Sprint extends Component {
               )
                 ? styles.curSprint
                 : null;
+            }}
+            expandable={{
+              expandedRowRender: (record) => {
+                const data = Object.values(record.tasks).flat();
+                return (
+                  <TaskList data={data} status={status} size="small"></TaskList>
+                );
+              },
+              rowExpandable: (record) =>
+                Object.values(record.tasks).flat().length > 0,
             }}
           >
             <Column
@@ -179,14 +211,12 @@ class Sprint extends Component {
               title="任务进度"
               dataIndex="_id"
               render={(id, record) => {
-                const sortedTasks = sortTasks(record.tasks);
-
                 return (
                   <Link to={`/project/board/sprint/${id}`}>
                     <TaskProgress
-                      todo={sortedTasks.todo.length}
-                      doing={sortedTasks.doing.length}
-                      done={sortedTasks.done.length}
+                      todo={record.tasks.todo.length}
+                      doing={record.tasks.doing.length}
+                      done={record.tasks.done.length}
                     />
                   </Link>
                 );

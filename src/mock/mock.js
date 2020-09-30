@@ -114,9 +114,13 @@ Mock.mock(RegExp(`${api}/tasks/list` + '.*'), 'get', function (options) {
           'status|1': ['todo', 'doing', 'done'],
           storyId: '@id',
           projectId: Cookies.get('projectId'),
-          createDate: '2020-07-14',
-          startDate: '2020-09-15',
-          endDate: '2020-09-22',
+          createDate: '@date',
+          startDate: function () {
+            return this.status !== 'todo' ? Mock.mock('@date') : null;
+          },
+          endDate: function () {
+            return this.status === 'done' ? Mock.mock('@date') : null;
+          },
           'users|0-5': [
             {
               _id: '@id',
@@ -174,6 +178,11 @@ Mock.mock(`${api}/sprints/create`, 'post', function (options) {
     data: {
       _id: Mock.mock('@id'),
       ...JSON.parse(options.body),
+      tasks: {
+        todo: [],
+        doing: [],
+        done: [],
+      },
     },
   };
 });
@@ -194,8 +203,12 @@ Mock.mock(`${api}/sprints/list`, 'get', function () {
               'status|1': ['todo', 'doing', 'done'],
               projectId: Cookies.get('projectId'),
               createDate: '@date',
-              startDate: '@date',
-              endDate: '@date',
+              startDate: function () {
+                return this.status !== 'todo' ? Mock.mock('@date') : null;
+              },
+              endDate: function () {
+                return this.status === 'done' ? Mock.mock('@date') : null;
+              },
               'users|0-5': [
                 {
                   _id: '@id',
@@ -219,8 +232,12 @@ Mock.mock(`${api}/sprints/list`, 'get', function () {
               'status|1': ['todo', 'doing', 'done'],
               projectId: Cookies.get('projectId'),
               createDate: '@date',
-              startDate: '@date',
-              endDate: '@date',
+              startDate: function () {
+                return this.status !== 'todo' ? Mock.mock('@date') : null;
+              },
+              endDate: function () {
+                return this.status === 'done' ? Mock.mock('@date') : null;
+              },
               'users|0-5': [
                 {
                   _id: '@id',
@@ -244,8 +261,12 @@ Mock.mock(`${api}/sprints/list`, 'get', function () {
               'status|1': ['todo', 'doing', 'done'],
               projectId: Cookies.get('projectId'),
               createDate: '@date',
-              startDate: '@date',
-              endDate: '@date',
+              startDate: function () {
+                return this.status !== 'todo' ? Mock.mock('@date') : null;
+              },
+              endDate: function () {
+                return this.status === 'done' ? Mock.mock('@date') : null;
+              },
               'users|0-5': [
                 {
                   _id: '@id',
@@ -280,8 +301,12 @@ Mock.mock(`${api}/stories/list`, 'get', function () {
               'status|1': ['todo', 'doing', 'done'],
               projectId: Cookies.get('projectId'),
               createDate: '@date',
-              startDate: '@date',
-              endDate: '@date',
+              startDate: function () {
+                return this.status !== 'todo' ? Mock.mock('@date') : null;
+              },
+              endDate: function () {
+                return this.status === 'done' ? Mock.mock('@date') : null;
+              },
               'users|0-5': [
                 {
                   _id: '@id',
@@ -331,4 +356,9 @@ Mock.mock(RegExp(`${api}/storys/edit/` + '.*'), 'post', function (options) {
       ...JSON.parse(options.body),
     },
   };
+});
+
+Mock.mock(`${api}/test`, 'get', {
+  code: 1,
+  msg: '请求返回的非正常信息',
 });

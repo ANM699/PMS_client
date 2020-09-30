@@ -125,3 +125,8 @@ export const reqEditStory = ({
     'POST'
   );
 };
+
+//测试全局消息
+export const testMessage = () => {
+  return ajax('/test');
+};

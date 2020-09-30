@@ -23,9 +23,9 @@ const option = {
     top: 10,
   },
   grid: {
-    left: '1%',
-    right: '1%',
-    bottom: '1%',
+    left: '2%',
+    right: '2%',
+    bottom: '2%',
     containLabel: true,
   },
   tooltip: {

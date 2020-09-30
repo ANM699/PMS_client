@@ -10,6 +10,7 @@ import {
   SolutionOutlined,
   ProfileOutlined,
   SnippetsOutlined,
+  BugOutlined,
 } from '@ant-design/icons';
 
 import styles from './sider.module.less';
@@ -56,12 +57,17 @@ class Sider extends Component {
       title: '个人中心',
       icon: <UserOutlined />,
     },
+    {
+      path: '/test',
+      title: '功能测试',
+      icon: <BugOutlined />,
+    },
   ];
 
   render() {
     const visiable = this.props.visiable;
     const currentPath = this.props.location.pathname;
-    const selectedMenu = this.menuList
+    let selectedMenu = this.menuList
       .findIndex((menu) => new RegExp(menu.path).test(currentPath))
       .toString();
     // if (!visiable) return null;

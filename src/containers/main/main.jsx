@@ -14,6 +14,7 @@ import Board from '../project/board/board';
 import Member from '../project/member/member';
 import Story from '../project/story/story';
 import Sprint from '../project/sprint/sprint';
+import Test from '../test/test';
 import NotFound from '../exception/not-found';
 import { resetUser, getUser } from '../../redux/user/actions';
 import { resetProject, getProject } from '../../redux/project/actions';
@@ -59,6 +60,10 @@ class Main extends Component {
     {
       path: '/project/sprint',
       component: Sprint,
+    },
+    {
+      path: '/test',
+      component: Test,
     },
     {
       component: NotFound,
