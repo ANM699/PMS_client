@@ -126,6 +126,11 @@ export const reqEditStory = ({
   );
 };
 
+//编辑任务
+export const reqEditTask = (task) => {
+  return ajax(`/tasks/edit/${task._id}`, task, 'POST');
+};
+
 //测试全局消息
 export const testMessage = () => {
   return ajax('/test');

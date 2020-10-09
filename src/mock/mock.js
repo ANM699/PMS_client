@@ -358,6 +358,15 @@ Mock.mock(RegExp(`${api}/storys/edit/` + '.*'), 'post', function (options) {
   };
 });
 
+Mock.mock(RegExp(`${api}/tasks/edit/` + '.*'), 'post', function (options) {
+  return {
+    code: 0,
+    data: {
+      ...JSON.parse(options.body),
+    },
+  };
+});
+
 Mock.mock(`${api}/test`, 'get', {
   code: 1,
   msg: '请求返回的非正常信息',

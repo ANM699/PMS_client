@@ -5,7 +5,7 @@ import { MenuOutlined, ProjectOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
 import Column from '../../../components/board/column';
-import TaskList from '../../../components/board/list';
+import TaskList from '../task/task';
 import { reqTaskList } from '../../../api/index';
 import { sortTasks, status } from '../../../utils/index';
 
@@ -49,6 +49,12 @@ export default class Board extends Component {
   onChange = (e) => {
     this.setState({
       value: e.target.value,
+    });
+  };
+
+  updateTasks = (tasks) => {
+    this.setState({
+      tasks: sortTasks(tasks),
     });
   };
 
@@ -123,7 +129,13 @@ export default class Board extends Component {
           </div>
         </DragDropContext>
       );
-    const listView = <TaskList data={tasksOfList} status={status}></TaskList>;
+    const listView = (
+      <TaskList
+        data={tasksOfList}
+        status={status}
+        updateTasks={this.updateTasks}
+      ></TaskList>
+    );
 
     return (
       <Card

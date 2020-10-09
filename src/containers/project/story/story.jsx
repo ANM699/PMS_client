@@ -8,9 +8,9 @@ import {
 } from '@ant-design/icons';
 
 import TaskProgress from '../../../components/task-progress/task-progress';
-import TaskModal from '../../../components/task/modal';
+import AddTaskModal from '../../../components/task/add-modal';
 import StoryModal from '../../../components/story/modal';
-import TaskList from '../../../components/board/list';
+import TaskList from '../task/task';
 import {
   reqCreateTask,
   reqCreateStory,
@@ -166,7 +166,12 @@ export default class Story extends Component {
               expandedRowRender: (record) => {
                 const data = Object.values(record.tasks).flat();
                 return (
-                  <TaskList data={data} status={status} size="small"></TaskList>
+                  <TaskList
+                    data={data}
+                    status={status}
+                    size="small"
+                    editable={false}
+                  ></TaskList>
                 );
               },
               rowExpandable: (record) =>
@@ -233,11 +238,11 @@ export default class Story extends Component {
           </Table>
         </Card>
 
-        <TaskModal
+        <AddTaskModal
           visible={taskModalVisible}
           onOk={this.handleTaskOk}
           onCancel={this.handleTaskCancel}
-        ></TaskModal>
+        ></AddTaskModal>
         <StoryModal
           visible={storyModalVisible}
           onOk={this.handleStoryOk}

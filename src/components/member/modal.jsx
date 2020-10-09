@@ -53,7 +53,12 @@ export default function MemberModal({
             },
           ]}
         >
-          <Select showSearch placeholder="选择成员" optionFilterProp="title">
+          <Select
+            showSearch
+            placeholder="选择成员"
+            optionLabelProp="title"
+            optionFilterProp="title"
+          >
             {users.map((user, index) => (
               <Option key={index} value={user._id} title={user.username}>
                 <Space>

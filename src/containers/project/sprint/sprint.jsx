@@ -7,7 +7,7 @@ import { PlusCircleOutlined, AppstoreAddOutlined } from '@ant-design/icons';
 
 import TaskProgress from '../../../components/task-progress/task-progress';
 import TaskTransfer from '../../../components/task/transfer';
-import TaskList from '../../../components/board/list';
+import TaskList from '../task/task';
 import { createSprint, getSprints } from '../../../redux/sprints/actions';
 import { sortTasks, status } from '../../../utils/index';
 
@@ -193,7 +193,12 @@ class Sprint extends Component {
               expandedRowRender: (record) => {
                 const data = Object.values(record.tasks).flat();
                 return (
-                  <TaskList data={data} status={status} size="small"></TaskList>
+                  <TaskList
+                    data={data}
+                    status={status}
+                    size="small"
+                    editable={false}
+                  ></TaskList>
                 );
               },
               rowExpandable: (record) =>
