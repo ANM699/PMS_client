@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Avatar, Card, Tag, Space, Table, Popconfirm } from 'antd';
 import {
   UserOutlined,
@@ -28,13 +28,58 @@ const roleOptions = [
   },
 ];
 
-export default class Member extends Component {
-  state = {
-    users: [],
-    members: [],
-    visible: false,
+export default function Member() {
+  const [users, setUsers] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    reqMemberList().then((res) => {
+      const result = res.data;
+      if (result.code === 0) {
+        setMembers(result.data);
+      }
+    });
+
+    //获取所有用户列表（添加用户时用）
+    reqUserList().then((res) => {
+      const result = res.data;
+      if (result.code === 0) {
+        setUsers(result.data);
+      }
+    });
+  }, []);
+
+  const handleDel = (id) => {
+    const newMembers = members.filter((member) => member._id !== id);
+    setMembers(newMembers);
   };
-  columns = [
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleOk = (values) => {
+    const user = users.find((user) => user._id === values._id);
+    const users = users.filter((user) => user._id !== values._id);
+    const roles = roleOptions.filter((role) => {
+      return values.roles.findIndex((value) => role.name === value) !== -1;
+    });
+    const newMember = {
+      ...user,
+      roles,
+    };
+    const members = [newMember, ...members];
+    setMembers(members);
+    setUsers(users);
+    setVisible(false);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const columns = [
     {
       title: '成员',
       dataIndex: 'username',
@@ -73,7 +118,7 @@ export default class Member extends Component {
         <Popconfirm
           placement="left"
           title="确认删除该成员？"
-          onConfirm={() => this.handleDel(_id)}
+          onConfirm={() => handleDel(_id)}
           okText="确认"
           cancelText="取消"
         >
@@ -85,92 +130,32 @@ export default class Member extends Component {
     },
   ];
 
-  handleDel = (id) => {
-    const members = this.state.members.filter((member) => member._id !== id);
-    this.setState({ members });
-  };
-
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
-  handleOk = (values) => {
-    const user = this.state.users.find((user) => user._id === values._id);
-    const users = this.state.users.filter((user) => user._id !== values._id);
-    const roles = roleOptions.filter((role) => {
-      return values.roles.findIndex((value) => role.name === value) !== -1;
-    });
-    const newMember = {
-      ...user,
-      roles,
-    };
-    const members = [newMember, ...this.state.members];
-    this.setState({
-      members,
-      users,
-      visible: false,
-    });
-  };
-
-  handleCancel = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  componentDidMount() {
-    reqMemberList().then((res) => {
-      const result = res.data;
-      if (result.code === 0) {
-        const members = result.data;
-        this.setState({
-          members,
-        });
-      }
-    });
-
-    //获取所有用户列表（添加用户时用）
-    reqUserList().then((res) => {
-      const result = res.data;
-      if (result.code === 0) {
-        const users = result.data;
-        this.setState({
-          users,
-        });
-      }
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <Card
-          title="项目成员"
-          extra={
-            <a onClick={this.showModal}>
-              <PlusCircleOutlined style={{ fontSize: '24px' }} />
-            </a>
-          }
-        >
-          <Table
-            showHeader={false}
-            pagination={false}
-            rowKey="_id"
-            columns={this.columns}
-            dataSource={this.state.members}
-          />
-        </Card>
-        <MemberModal
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          member={null}
-          users={this.state.users}
-          roles={roleOptions}
-        ></MemberModal>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Card
+        title="项目成员"
+        extra={
+          <a onClick={showModal}>
+            <PlusCircleOutlined style={{ fontSize: '24px' }} />
+          </a>
+        }
+      >
+        <Table
+          showHeader={false}
+          pagination={false}
+          rowKey="_id"
+          columns={columns}
+          dataSource={members}
+        />
+      </Card>
+      <MemberModal
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        member={null}
+        users={users}
+        roles={roleOptions}
+      ></MemberModal>
+    </div>
+  );
 }

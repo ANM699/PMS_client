@@ -2,11 +2,26 @@ import React, { useState, useEffect } from 'react';
 import List from '../../../components/task/list';
 import Modal from '../../../components/task/edit-modal';
 import { reqMemberList, reqEditTask } from '../../../api/index';
+
 export default function Task(props) {
   const [visible, setVisible] = useState(false);
   const [task, setTask] = useState({ users: [] });
   const [users, setUsers] = useState([]);
   const [data, setData] = useState();
+
+  useEffect(() => {
+    reqMemberList().then((res) => {
+      const result = res.data;
+      if (result.code === 0) {
+        setUsers(result.data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    setData(props.data);
+  }, [props.data]);
+
   function showModal(task) {
     setVisible(true);
     setTask(task);
@@ -38,21 +53,6 @@ export default function Task(props) {
       }
     });
   }
-
-  useEffect(() => {
-    if (users.length === 0) {
-      reqMemberList().then((res) => {
-        const result = res.data;
-        if (result.code === 0) {
-          setUsers(result.data);
-        }
-      });
-    }
-  });
-
-  useEffect(() => {
-    setData(props.data);
-  }, [props.data]);
 
   return (
     <>

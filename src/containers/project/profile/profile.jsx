@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Card, Row, Col, Statistic } from 'antd';
 import moment from 'moment';
 import { TeamOutlined } from '@ant-design/icons';
@@ -76,87 +76,77 @@ const option = {
   ],
 };
 
-export default class Profile extends Component {
-  componentDidMount() {
+export default function Profile(props) {
+  const chartRef = useRef(null);
+  useEffect(() => {
     setTimeout(() => {
-      const chart = echarts.init(this.chart, 'light');
+      const chart = echarts.init(chartRef.current, 'light');
       chart.setOption(option);
       chart.on('finished', () => {
         chart.resize();
       });
     }, 0);
+  }, []);
 
-    // const chart = echarts.init(this.chart);
-    // chart.setOption(option);
-  }
-
-  render() {
-    return (
-      // <>
-      //   <div>
-      //     当前处于第2个周期(2020-9-13~2020-10-10)，该周期共有任务30个，其中3个任务为上个周期遗留。
-      //   </div>
-      //   <div>目前未开始10个，进行中10个，已结束10个。</div>
-      // </>
-      <div>
-        <Row gutter={[16, 16]}>
-          <Col span={8}>
-            <Card
-              hoverable
-              onClick={() => {
-                this.props.history.replace('/project/sprint');
+  return (
+    // <>
+    //   <div>
+    //     当前处于第2个周期(2020-9-13~2020-10-10)，该周期共有任务30个，其中3个任务为上个周期遗留。
+    //   </div>
+    //   <div>目前未开始10个，进行中10个，已结束10个。</div>
+    // </>
+    <div>
+      <Row gutter={[16, 16]}>
+        <Col span={8}>
+          <Card
+            hoverable
+            onClick={() => {
+              props.history.replace('/project/sprint');
+            }}
+          >
+            <Countdown
+              title="距离阶段结束"
+              value={moment('2020-10-12')}
+              format="D 天 H 时"
+              valueStyle={{ color: '#cf1322' }}
+            />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card
+            hoverable
+            onClick={() => {
+              props.history.replace('/project/board');
+            }}
+          >
+            <Statistic title="阶段任务" value={56} />
+            {/* <TaskProgress todo={10} doing={39} done={7}></TaskProgress> */}
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card
+            hoverable
+            onClick={() => {
+              props.history.replace('/project/member');
+            }}
+          >
+            <Statistic title="项目成员" value={13} prefix={<TeamOutlined />} />
+          </Card>
+        </Col>
+      </Row>
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Card>
+            <div
+              ref={chartRef}
+              style={{
+                width: '100%',
+                height: '400px',
               }}
-            >
-              <Countdown
-                title="距离阶段结束"
-                value={moment('2020-10-12')}
-                format="D 天 H 时"
-                valueStyle={{ color: '#cf1322' }}
-              />
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card
-              hoverable
-              onClick={() => {
-                this.props.history.replace('/project/board');
-              }}
-            >
-              <Statistic title="阶段任务" value={56} />
-              {/* <TaskProgress todo={10} doing={39} done={7}></TaskProgress> */}
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card
-              hoverable
-              onClick={() => {
-                this.props.history.replace('/project/member');
-              }}
-            >
-              <Statistic
-                title="项目成员"
-                value={13}
-                prefix={<TeamOutlined />}
-              />
-            </Card>
-          </Col>
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <Card>
-              <div
-                ref={(el) => {
-                  this.chart = el;
-                }}
-                style={{
-                  width: '100%',
-                  height: '400px',
-                }}
-              ></div>
-            </Card>
-          </Col>
-        </Row>
-      </div>
-    );
-  }
+            ></div>
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  );
 }

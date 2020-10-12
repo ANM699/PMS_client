@@ -39,49 +39,42 @@ const displayDate = (task) => {
   }
 };
 
-export default class Item extends Component {
-  render() {
-    const { task, index } = this.props;
-    return (
-      <Draggable
-        draggableId={task._id}
-        index={index}
-        // isDragDisabled={task.status === 'done'}
-      >
-        {(provided, snapshot) => (
-          <div
-            className={styles.container}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            // style={getItemStyle(
-            //   snapshot.isDragging,
-            //   provided.draggableProps.style
-            // )}
-          >
-            <Card hoverable={true}>
-              <p>{task.content}</p>
-              <div className={styles.date}>{displayDate(task)}</div>
-              <div>
-                <Avatar.Group>
-                  {task.users.map((user) => (
-                    <Tooltip
-                      key={user._id}
-                      title={user.username}
-                      placement="top"
-                    >
-                      <Avatar
-                        style={{ backgroundColor: user.avatar }}
-                        icon={<UserOutlined />}
-                      />
-                    </Tooltip>
-                  ))}
-                </Avatar.Group>
-              </div>
-            </Card>
-          </div>
-        )}
-      </Draggable>
-    );
-  }
+export default function Item({ task, index }) {
+  return (
+    <Draggable
+      draggableId={task._id}
+      index={index}
+      // isDragDisabled={task.status === 'done'}
+    >
+      {(provided, snapshot) => (
+        <div
+          className={styles.container}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          // style={getItemStyle(
+          //   snapshot.isDragging,
+          //   provided.draggableProps.style
+          // )}
+        >
+          <Card hoverable={true}>
+            <p>{task.content}</p>
+            <div className={styles.date}>{displayDate(task)}</div>
+            <div>
+              <Avatar.Group>
+                {task.users.map((user) => (
+                  <Tooltip key={user._id} title={user.username} placement="top">
+                    <Avatar
+                      style={{ backgroundColor: user.avatar }}
+                      icon={<UserOutlined />}
+                    />
+                  </Tooltip>
+                ))}
+              </Avatar.Group>
+            </div>
+          </Card>
+        </div>
+      )}
+    </Draggable>
+  );
 }
