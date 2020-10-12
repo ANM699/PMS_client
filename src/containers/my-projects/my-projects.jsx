@@ -1,24 +1,24 @@
-import React, { Component, useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import Cookies from 'js-cookie';
-import { Card, Modal } from 'antd';
+import React, { Component, useState, useEffect } from "react";
+import { connect } from "react-redux";
+import Cookies from "js-cookie";
+import { Card, Modal } from "antd";
 import {
   PlusCircleOutlined,
   ExclamationCircleOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import ProjectList from '../../components/project/list';
-import ProjectModal from '../../components/project/modal';
+import ProjectList from "../../components/project/list";
+import ProjectModal from "../../components/project/modal";
 import {
   // createProject,
   // getProjectList,
   switchProject,
-} from '../../redux/project/actions';
+} from "../../redux/project/actions";
 import {
   reqProjectList,
   reqCreateProject,
   reqEditProject,
-} from '../../api/index';
+} from "../../api/index";
 
 //component模式
 // class MyProjects extends Component {
@@ -166,35 +166,35 @@ const MyProjects = (props) => {
 
   const handleConfirm = (item) => {
     Modal.confirm({
-      title: '选择并切换至该项目？',
+      title: "选择并切换至该项目？",
       icon: <ExclamationCircleOutlined />,
-      cancelText: '取消',
-      okText: '确定',
+      cancelText: "取消",
+      okText: "确定",
       onOk() {
         props.switchProject(item);
         //todo:重置store.state中的sprints
-        Cookies.set('projectId', item._id);
-        props.history.push('/project/profile');
+        Cookies.set("projectId", item._id);
+        props.history.push("/project/profile");
       },
     });
   };
 
   const handleOk = (values) => {
-    const _id = current ? current._id : '';
-    const rangeDate = values['rangeDate'];
-    values.startDate = rangeDate[0].format('YYYY-MM-DD');
-    values.endDate = rangeDate[1].format('YYYY-MM-DD');
+    const _id = current ? current._id : "";
+    const rangeDate = values["rangeDate"];
+    values.startDate = rangeDate[0].format("YYYY-MM-DD");
+    values.endDate = rangeDate[1].format("YYYY-MM-DD");
 
     if (_id) {
       //编辑
       reqEditProject({ ...values, _id }).then((res) => {
         const result = res.data;
         if (result.code === 0) {
-          const projectList = projectList.map((project) =>
+          const newProjectList = projectList.map((project) =>
             project._id === _id ? result.data : project
           );
           setVisible(false);
-          setProjectList(projectList);
+          setProjectList(newProjectList);
           //如果修改的是当前选择的项目
           if (_id === props.project._id) props.switchProject(result.data);
         }
@@ -226,7 +226,7 @@ const MyProjects = (props) => {
               showModal();
             }}
           >
-            <PlusCircleOutlined style={{ fontSize: '24px' }} />
+            <PlusCircleOutlined style={{ fontSize: "24px" }} />
           </a>
         }
       >
