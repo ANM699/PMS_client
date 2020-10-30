@@ -1,114 +1,124 @@
-import React, { Component } from 'react';
-import { Card, Table, Form, DatePicker, Modal, Divider } from 'antd';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
-import { PlusCircleOutlined, AppstoreAddOutlined } from '@ant-design/icons';
+import React, { Component, useState, useEffect, useRef } from "react";
+import { Card, Table, Form, DatePicker, Modal, Divider } from "antd";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import moment from "moment";
+import { PlusCircleOutlined, AppstoreAddOutlined } from "@ant-design/icons";
 
-import TaskProgress from '../../../components/task-progress/task-progress';
-import TaskTransfer from '../../../components/task/transfer';
-import TaskList from '../task/task';
-import { createSprint, getSprints } from '../../../redux/sprints/actions';
-import { sortTasks, status } from '../../../utils/index';
+import TaskProgress from "../../../components/task-progress/task-progress";
+import TaskTransfer from "../../../components/task/transfer";
+import TaskList from "../task/task";
+import { createSprint, getSprints } from "../../../redux/sprints/actions";
+import { sortTasks, status } from "../../../utils/index";
 
 import {
   reqTaskList,
   reqSprintList,
   reqCreateSprint,
-} from '../../../api/index';
+} from "../../../api/index";
 
-import styles from './sprint.module.less';
+import styles from "./sprint.module.less";
 
 const { RangePicker } = DatePicker;
 const { Column } = Table;
 
 const columns = [
   {
-    dataIndex: 'content',
-    title: '任务',
+    dataIndex: "content",
+    title: "任务",
   },
   {
-    dataIndex: 'createDate',
-    title: '创建时间',
+    dataIndex: "createDate",
+    title: "创建时间",
   },
 ];
 
-class Sprint extends Component {
-  state = {
-    visible: false,
-    transferVisible: false,
-    targetKeys: [],
-    sprintList: [],
-    tasks: [],
-    currentId: null,
-  };
+const Sprint = (props) => {
+  const [visible, setVisible] = useState(false);
+  const [transferVisible, setTransferVisible] = useState(false);
+  const [targetKeys, setTargetKeys] = useState([]);
+  const [sprintList, setSprintList] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [currentId, setCurrentId] = useState(null);
 
-  onChange = (nextTargetKeys) => {
-    this.setState({ targetKeys: nextTargetKeys });
-  };
+  const formRef = useRef(null);
 
-  showModal = () => {
-    this.setState({
-      visible: true,
+  useEffect(() => {
+    props.getSprints();
+    reqSprintList().then((res) => {
+      const result = res.data;
+      if (result.code === 0) {
+        result.data.forEach((sprint) => {
+          const tasks = sprint.tasks;
+          sprint.tasks = sortTasks(tasks);
+        });
+        setSprintList(result.data);
+      }
     });
-  };
-
-  showTransferModal = (id) => {
-    this.setState({
-      transferVisible: true,
-      targetKeys: [],
-      currentId: id,
+    reqTaskList().then((res) => {
+      const result = res.data;
+      const tasks = result.data.filter((task) => task.status === "todo");
+      if (result.code === 0) {
+        setTasks(tasks);
+      }
     });
+  }, []);
+
+  const onChange = (nextTargetKeys) => {
+    setTargetKeys(nextTargetKeys);
   };
 
-  handleCancel = (e) => {
-    this.setState({
-      visible: false,
-    });
+  const showModal = () => {
+    setVisible(true);
   };
 
-  handleTransferCancel = (e) => {
-    this.setState({
-      transferVisible: false,
-    });
+  const showTransferModal = (id) => {
+    setTransferVisible(true);
+    setTargetKeys([]);
+    setCurrentId(id);
   };
 
-  handleOk = (e) => {
-    this.form
+  const handleCancel = (e) => {
+    setVisible(false);
+  };
+
+  const handleTransferCancel = (e) => {
+    setTransferVisible(false);
+  };
+
+  const handleOk = (e) => {
+    formRef.current
       .validateFields()
       .then((value) => {
-        const rangeDate = value['rangeDate'];
-        const startDate = rangeDate[0].format('YYYY-MM-DD');
-        const endDate = rangeDate[1].format('YYYY-MM-DD');
+        const rangeDate = value["rangeDate"];
+        const startDate = rangeDate[0].format("YYYY-MM-DD");
+        const endDate = rangeDate[1].format("YYYY-MM-DD");
         return reqCreateSprint({ startDate, endDate });
       })
       .then((res) => {
         const result = res.data;
         if (result.code === 0) {
-          const sprintList = [...this.state.sprintList, result.data];
-          this.setState({
-            visible: false,
-            sprintList,
-          });
-          this.form.resetFields();
+          const newSprintList = [...sprintList, result.data];
+          setVisible(false);
+          setSprintList(newSprintList);
+          formRef.current.resetFields();
         }
       })
       .catch((info) => {
-        console.log('验证失败：', info);
+        console.log("验证失败：", info);
       });
   };
 
-  handleTransferOk = () => {
-    const { targetKeys, currentId } = this.state;
+  const handleTransferOk = () => {
     if (targetKeys.length) {
       const filterTasks = [];
-      const tasks = [];
-      this.state.tasks.forEach((task) => {
+      const newTasks = [];
+      tasks.forEach((task) => {
         targetKeys.includes(task._id)
           ? filterTasks.push(task)
-          : tasks.push(task);
+          : newTasks.push(task);
       });
-      const sprintList = this.state.sprintList.map((sprint) =>
+      const newSprintList = sprintList.map((sprint) =>
         sprint._id === currentId
           ? {
               ...sprint,
@@ -120,180 +130,149 @@ class Sprint extends Component {
           : sprint
       );
       //todo:设置task的sprintId
-      this.setState({ sprintList, tasks, transferVisible: false });
+      setSprintList(newSprintList);
+      setTasks(newTasks);
+      setTransferVisible(false);
     } else {
-      this.setState({ transferVisible: false });
+      setTransferVisible(false);
     }
   };
 
-  componentDidMount() {
-    this.props.getSprints();
-    reqSprintList().then((res) => {
-      const result = res.data;
-      if (result.code === 0) {
-        result.data.forEach((sprint) => {
-          const tasks = sprint.tasks;
-          sprint.tasks = sortTasks(tasks);
-        });
-        this.setState({
-          sprintList: result.data,
-        });
-      }
-    });
-    reqTaskList().then((res) => {
-      const result = res.data;
-      const tasks = result.data.filter((task) => task.status === 'todo');
-      if (result.code === 0) {
-        this.setState({
-          tasks,
-        });
-      }
-    });
+  const { startDate, endDate } = props.project;
+  const length = sprintList.length;
+  let newStartDate = startDate;
+
+  if (length > 0) {
+    const lastEndDate = sprintList[length - 1].endDate;
+    newStartDate = moment(lastEndDate).add(1, "days").format("YYYY-MM-DD");
   }
 
-  render() {
-    const { startDate, endDate } = this.props.project;
-
-    const { targetKeys, tasks, transferVisible, sprintList } = this.state;
-    // const sprints = this.props.sprints;
-    const length = sprintList.length;
-
-    let newStartDate = startDate;
-
-    if (length > 0) {
-      const lastEndDate = sprintList[length - 1].endDate;
-      newStartDate = moment(lastEndDate).add(1, 'days').format('YYYY-MM-DD');
-    }
-
-    return (
-      <div>
-        <Card
-          title="项目阶段"
-          extra={
-            <a onClick={this.showModal}>
-              <PlusCircleOutlined style={{ fontSize: '24px' }} />
-            </a>
-          }
+  return (
+    <div>
+      <Card
+        title="项目阶段"
+        extra={
+          <a onClick={showModal}>
+            <PlusCircleOutlined style={{ fontSize: "24px" }} />
+          </a>
+        }
+      >
+        <Table
+          dataSource={sprintList}
+          pagination={false}
+          rowKey="_id"
+          rowClassName={(record) => {
+            return moment().isBetween(
+              record.startDate,
+              record.endDate,
+              null,
+              "[]"
+            )
+              ? styles.curSprint
+              : null;
+          }}
+          expandable={{
+            expandedRowRender: (record) => {
+              const data = Object.values(record.tasks).flat();
+              return (
+                <TaskList
+                  data={data}
+                  status={status}
+                  size="small"
+                  editable={false}
+                ></TaskList>
+              );
+            },
+            rowExpandable: (record) =>
+              Object.values(record.tasks).flat().length > 0,
+          }}
         >
-          <Table
-            dataSource={sprintList}
-            pagination={false}
-            rowKey="_id"
-            rowClassName={(record) => {
-              return moment().isBetween(
-                record.startDate,
-                record.endDate,
-                null,
-                '[]'
-              )
-                ? styles.curSprint
-                : null;
+          <Column
+            title="阶段周期"
+            key="date"
+            render={(value, record) => `${record.startDate}~${record.endDate}`}
+          />
+          <Column
+            title="任务进度"
+            dataIndex="_id"
+            render={(id, record) => {
+              return (
+                <Link to={`/project/board/sprint/${id}`}>
+                  <TaskProgress
+                    todo={record.tasks.todo.length}
+                    doing={record.tasks.doing.length}
+                    done={record.tasks.done.length}
+                  />
+                </Link>
+              );
             }}
-            expandable={{
-              expandedRowRender: (record) => {
-                const data = Object.values(record.tasks).flat();
-                return (
-                  <TaskList
-                    data={data}
-                    status={status}
-                    size="small"
-                    editable={false}
-                  ></TaskList>
-                );
-              },
-              rowExpandable: (record) =>
-                Object.values(record.tasks).flat().length > 0,
-            }}
-          >
-            <Column
-              title="阶段周期"
-              key="date"
-              render={(value, record) =>
-                `${record.startDate}~${record.endDate}`
-              }
-            />
-            <Column
-              title="任务进度"
-              dataIndex="_id"
-              render={(id, record) => {
-                return (
-                  <Link to={`/project/board/sprint/${id}`}>
-                    <TaskProgress
-                      todo={record.tasks.todo.length}
-                      doing={record.tasks.doing.length}
-                      done={record.tasks.done.length}
-                    />
-                  </Link>
-                );
-              }}
-            />
-            <Column
-              title="操作"
-              dataIndex="_id"
-              render={(id) => (
-                <>
-                  {/* <Link to="/project/board">
+          />
+          <Column
+            title="操作"
+            dataIndex="_id"
+            render={(id) => (
+              <>
+                {/* <Link to="/project/board">
                     <ProjectOutlined />
                   </Link>
                   <Divider type="vertical" /> */}
-                  <a
-                    onClick={() => {
-                      this.showTransferModal(id);
-                    }}
-                  >
-                    <AppstoreAddOutlined />
-                  </a>
-                </>
-              )}
+                <a
+                  onClick={() => {
+                    showTransferModal(id);
+                  }}
+                >
+                  <AppstoreAddOutlined />
+                </a>
+              </>
+            )}
+          />
+        </Table>
+      </Card>
+
+      <Modal
+        title="新增阶段"
+        width={480}
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="确定"
+        cancelText="取消"
+      >
+        <Form ref={formRef}>
+          <Form.Item
+            name="rangeDate"
+            rules={[
+              {
+                required: true,
+                message: "请选择阶段时间！",
+              },
+            ]}
+          >
+            <RangePicker
+              disabledDate={(currentDate) =>
+                !currentDate.isBetween(newStartDate, endDate, "day", "[]")
+              }
+              defaultPickerValue={[moment(newStartDate)]}
+              style={{
+                width: "100%",
+              }}
             />
-          </Table>
-        </Card>
+          </Form.Item>
+        </Form>
+      </Modal>
 
-        <Modal
-          title="新增阶段"
-          width={480}
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          okText="确定"
-          cancelText="取消"
-        >
-          <Form ref={(el) => (this.form = el)}>
-            <Form.Item
-              name="rangeDate"
-              rules={[
-                {
-                  required: true,
-                  message: '请选择阶段时间！',
-                },
-              ]}
-            >
-              <RangePicker
-                disabledDate={(currentDate) =>
-                  !currentDate.isBetween(newStartDate, endDate, 'day', '[]')
-                }
-                defaultPickerValue={[moment(newStartDate)]}
-                style={{
-                  width: '100%',
-                }}
-              />
-            </Form.Item>
-          </Form>
-        </Modal>
-
-        <TaskTransfer
-          onCancel={this.handleTransferCancel}
-          visible={transferVisible}
-          dataSource={tasks}
-          targetKeys={targetKeys}
-          onOk={this.handleTransferOk}
-          onChange={this.onChange}
-          columns={columns}
-        ></TaskTransfer>
-      </div>
-    );
-  }
-}
+      <TaskTransfer
+        onCancel={handleTransferCancel}
+        visible={transferVisible}
+        dataSource={tasks}
+        targetKeys={targetKeys}
+        onOk={handleTransferOk}
+        onChange={onChange}
+        columns={columns}
+      ></TaskTransfer>
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => ({
   // projectList: state.projectList,

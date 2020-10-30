@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { Form, Input, Button, Alert, Space } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import Cookies from 'js-cookie';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { Form, Input, Button, Alert, Space } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
 
-import styles from './login.module.less';
+import styles from "./login.module.less";
 
-import { login } from '../../redux/user/actions';
+import { login } from "../../redux/user/actions";
 
 // class Login extends Component {
 //   onFinish = (user) => {
@@ -95,14 +95,14 @@ const Login = ({ login, history, user }) => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   const toRegister = () => {
-    history.replace('/register');
+    history.replace("/register");
   };
 
-  const userId = Cookies.get('userId');
+  const userId = Cookies.get("userId");
   const { msg } = user;
 
   if (userId) {
@@ -112,6 +112,7 @@ const Login = ({ login, history, user }) => {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.main}>
+          <h1 style={{ textAlign: "center" }}>项目管理系统</h1>
           <Form
             wrapperCol={{ span: 24 }}
             name="loginForm"
@@ -129,7 +130,7 @@ const Login = ({ login, history, user }) => {
               rules={[
                 {
                   required: true,
-                  message: '请输入用户名！',
+                  message: "请输入用户名！",
                 },
               ]}
             >
@@ -143,7 +144,7 @@ const Login = ({ login, history, user }) => {
               rules={[
                 {
                   required: true,
-                  message: '请输入密码！',
+                  message: "请输入密码！",
                 },
               ]}
             >
