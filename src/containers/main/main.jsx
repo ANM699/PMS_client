@@ -1,23 +1,34 @@
-import React, { useState, useEffect, Component } from 'react';
+import React, { useState, useEffect, Component, lazy, Suspense } from 'react';
 import Cookies from 'js-cookie';
 import { Redirect, Switch, Route } from 'react-router-dom';
-import { Layout, Modal } from 'antd';
+import { Layout, Modal, Spin } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 
 import Sider from '../../components/sider/sider';
 import Header from '../../components/header/header';
-import MyProjects from '../my-projects/my-projects';
-import Profile from '../project/profile/profile';
-import Meeting from '../project/meeting/meeting';
-import Board from '../project/board/board';
-import Member from '../project/member/member';
-import Story from '../project/story/story';
-import Sprint from '../project/sprint/sprint';
-import Test from '../test/test';
-import NotFound from '../exception/not-found';
+// import MyProjects from '../my-projects/my-projects';
+// import Profile from '../project/profile/profile';
+// import Meeting from '../project/meeting/meeting';
+// import Board from '../project/board/board';
+// import Member from '../project/member/member';
+// import Story from '../project/story/story';
+// import Sprint from '../project/sprint/sprint';
+// import Test from '../test/test';
+// import NotFound from '../exception/not-found';
 import { resetUser, getUser } from '../../redux/user/actions';
 import { resetProject, getProject } from '../../redux/project/actions';
+
+//懒加载（代码分割）
+const MyProjects = lazy(() => import('../my-projects/my-projects'));
+const Profile = lazy(() => import('../project/profile/profile'));
+const Meeting = lazy(() => import('../project/meeting/meeting'));
+const Board = lazy(() => import('../project/board/board'));
+const Member = lazy(() => import('../project/member/member'));
+const Story = lazy(() => import('../project/story/story'));
+const Sprint = lazy(() => import('../project/sprint/sprint'));
+const Test = lazy(() => import('../test/test'));
+const NotFound = lazy(() => import('../exception/not-found'));
 
 const { Content } = Layout;
 
@@ -253,12 +264,16 @@ const Main = ({
           toggle={visiable ? toggle : null}
           logout={logout}
         />
-        <Content style={{ padding: '24px', minHeight: 'auto' }}>
-          <Switch>
-            {navList.map((nav, index) => (
-              <Route key={index} {...nav} />
-            ))}
-          </Switch>
+        <Content
+          style={{ padding: '24px', minHeight: 'auto', textAlign: 'center' }}
+        >
+          <Suspense fallback={<Spin style={{ marginTop: '200px' }} />}>
+            <Switch>
+              {navList.map((nav, index) => (
+                <Route key={index} {...nav} />
+              ))}
+            </Switch>
+          </Suspense>
         </Content>
       </Layout>
     </Layout>
