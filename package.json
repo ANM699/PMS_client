@@ -9,7 +9,7 @@
     "@testing-library/react": "^11.0.2",
     "@testing-library/user-event": "^12.1.4",
     "antd": "^4.6.3",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "craco-less": "^1.17.0",
     "echarts": "^4.9.0",
     "js-cookie": "^2.2.1",
