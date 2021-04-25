@@ -97,7 +97,7 @@ export default function Profile(props) {
     // </>
     <div>
       <Row gutter={[16, 16]}>
-        <Col span={8}>
+        <Col xs={24} sm={24} md={8}>
           <Card
             hoverable
             onClick={() => {
@@ -112,7 +112,7 @@ export default function Profile(props) {
             />
           </Card>
         </Col>
-        <Col span={8}>
+        <Col xs={12} sm={12} md={8}>
           <Card
             hoverable
             onClick={() => {
@@ -123,7 +123,7 @@ export default function Profile(props) {
             {/* <TaskProgress todo={10} doing={39} done={7}></TaskProgress> */}
           </Card>
         </Col>
-        <Col span={8}>
+        <Col xs={12} sm={12} md={8}>
           <Card
             hoverable
             onClick={() => {

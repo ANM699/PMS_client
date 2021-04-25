@@ -129,6 +129,7 @@ const Register = ({ register, history, user }) => {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.main}>
+          <h1 style={{ textAlign: 'center' }}>项目管理系统</h1>
           <Form
             wrapperCol={{ span: 24 }}
             name="loginForm"
@@ -183,7 +184,7 @@ const Register = ({ register, history, user }) => {
                 placeholder="密码"
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item style={{ textAlign: 'center' }}>
               <Space>
                 <Button type="primary" htmlType="submit">
                   注册
