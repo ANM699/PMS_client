@@ -99,6 +99,7 @@ export default function Member() {
       render: (text) => (
         <span style={{ color: 'rgba(0,0,0,.45)' }}>{text}</span>
       ),
+      responsive: ['sm'],
     },
     {
       title: '角色',
@@ -109,6 +110,7 @@ export default function Member() {
             {role.name}
           </Tag>
         )),
+      responsive: ['sm'],
     },
     {
       title: '操作',

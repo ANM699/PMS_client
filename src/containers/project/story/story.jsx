@@ -1,39 +1,39 @@
-import React, { Component, useState, useEffect } from "react";
-import { Card, Table, Form, DatePicker, Modal, Tag, Divider } from "antd";
-import { Link } from "react-router-dom";
+import React, { Component, useState, useEffect } from 'react';
+import { Card, Table, Form, DatePicker, Modal, Tag, Divider } from 'antd';
+import { Link } from 'react-router-dom';
 import {
   EditOutlined,
   PlusCircleOutlined,
   ForkOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import TaskProgress from "../../../components/task-progress/task-progress";
-import AddTaskModal from "../../../components/task/add-modal";
-import StoryModal from "../../../components/story/modal";
-import TaskList from "../task/task";
+import TaskProgress from '../../../components/task-progress/task-progress';
+import AddTaskModal from '../../../components/task/add-modal';
+import StoryModal from '../../../components/story/modal';
+import TaskList from '../task/task';
 import {
   reqCreateTask,
   reqCreateStory,
   reqStoryList,
   reqEditStory,
-} from "../../../api/index";
+} from '../../../api/index';
 
-import { sortTasks, status } from "../../../utils/index";
+import { sortTasks, status } from '../../../utils/index';
 
 const { Column } = Table;
 
 const priority = [
   {
-    color: "#2ac06d",
-    display: "低",
+    color: '#2ac06d',
+    display: '低',
   },
   {
-    color: "#f9944a",
-    display: "中",
+    color: '#f9944a',
+    display: '中',
   },
   {
-    color: "#ff4d4f",
-    display: "高",
+    color: '#ff4d4f',
+    display: '高',
   },
 ];
 
@@ -75,7 +75,7 @@ export default function Story(props) {
   };
 
   const handleTaskOk = (values) => {
-    values.createDate = values.createDate.format("YYYY-MM-DD");
+    values.createDate = values.createDate.format('YYYY-MM-DD');
     reqCreateTask(values).then((res) => {
       const result = res.data;
       if (result.code === 0) {
@@ -92,8 +92,8 @@ export default function Story(props) {
   };
 
   const handleStoryOk = (values) => {
-    const _id = current ? current._id : "";
-    values.date = values.date.format("YYYY-MM-DD");
+    const _id = current ? current._id : '';
+    values.date = values.date.format('YYYY-MM-DD');
 
     if (_id) {
       //编辑
@@ -129,7 +129,7 @@ export default function Story(props) {
               showStoryModal();
             }}
           >
-            <PlusCircleOutlined style={{ fontSize: "24px" }} />
+            <PlusCircleOutlined style={{ fontSize: '24px' }} />
           </a>
         }
       >
@@ -158,11 +158,12 @@ export default function Story(props) {
             title="优先级"
             dataIndex="priority"
             key="priority"
+            responsive={['sm']}
             render={(value) => {
               const p = priority[value];
               return (
                 <Tag
-                  style={{ width: "40px", textAlign: "center" }}
+                  style={{ width: '40px', textAlign: 'center' }}
                   color={p.color}
                 >
                   {p.display}
@@ -170,13 +171,23 @@ export default function Story(props) {
               );
             }}
           />
-          <Column title="角色" dataIndex="role" key="role" />
-          <Column title="行为" dataIndex="activity" key="activity" />
+          <Column
+            title="角色"
+            dataIndex="role"
+            key="role"
+            responsive={['sm']}
+          />
+          <Column
+            title="行为"
+            dataIndex="activity"
+            key="activity"
+            responsive={['sm']}
+          />
           <Column
             title="目的"
             dataIndex="businessValue"
             key="businessValue"
-            progress
+            responsive={['sm']}
           />
 
           <Column
@@ -194,7 +205,12 @@ export default function Story(props) {
               );
             }}
           />
-          <Column title="提出日期" dataIndex="date" key="date" />
+          <Column
+            title="提出日期"
+            dataIndex="date"
+            key="date"
+            responsive={['sm']}
+          />
           <Column
             title="操作"
             key="_id"
